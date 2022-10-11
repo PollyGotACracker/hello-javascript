@@ -1,0 +1,454 @@
+body {
+  overflow: hidden;
+}
+@keyframes fadeIn {
+  from {opacity: 0}
+  to {opacity: 1}
+}
+
+/* 커서 아이템 */
+.cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  mix-blend-mode: screen;
+  opacity: .5;
+  z-index: 1000;
+  pointer-events: none;
+}
+.cursor .circle {
+  position: fixed;
+  display: block;
+  width: 0;
+  height: 0;
+  border-radius: 100%;
+  background-color: blue;
+  margin: -40px 0 0 -40px;
+  transition: all .2s ease-in-out;
+}
+
+/* header 부분에 height를 넣어서 
+창 세로 길이를 줄였을 때 글씨가 올라가는 현상 없애기 */
+
+/* 배경음악 플레이어 */
+.btn-player {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  outline: 0;
+  border: 0;
+  background-color: transparent;
+  z-index: 2;
+}
+.btn-player:before {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  content: "\e04f";
+  font-family: "Material Icons";
+  font-weight: 400;
+  font-size: 40px;
+  color: white;
+}
+.btn-player:active:before {
+  transform: scale(0.9);
+}
+.btn-player.active:before {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  content: "\e050";
+  font-family: "Material Icons";
+  font-weight: 400;
+  font-size: 40px;
+  color: white;
+}
+
+/* 사이드바 아이콘 */
+.btn-sidebar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  outline: 0;
+  border: 0;
+  background-color: transparent;
+  z-index: 2;
+  display: none;
+}
+.btn-sidebar:before {
+  display: block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  content: "\e5d2";
+  font-family: "Material Icons";
+  font-weight: 400;
+  font-size: 40px;
+  color: white;
+}
+
+/* 전체 페이지 */
+main {
+  position: relative;
+  width: 100vw;
+  height: calc(100vh - 30px);
+  background: url(./image/orlando-brooke-PkeEM_G5GC8-unsplash.jpg);
+  background-size: cover;
+  background-position: center;
+  font-size: 15px;
+}
+main section{
+  display: none;
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100vw;
+  height: calc(100% - (100px + 15vh));
+  z-index: 1;
+}
+main section.active {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 1s cubic-bezier(0.47, 0, 0.745, 0.715);
+}
+
+/* 모바일 화면에서 메뉴 버튼 클릭 시 */
+.blind {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  background-color: black;
+  opacity: .5;
+  width: 100vw;
+  height: 100vh;
+  z-index: 3;
+}
+
+/* COVER */
+.cover > * {
+  font-family: play;
+  margin: 5px;
+  text-align: center;
+}
+.cover .quote {
+  margin-bottom: 3em;
+  color: white;
+  font-size: 1.6em;
+  word-break: keep-all;
+}
+.cover .today {
+  font-size: 4em;
+}
+.cover .clock {
+  font-size: 6.8em;
+  font-weight: bold;
+}
+.cover .btn-changeFunc {
+  width: 10em;
+  height: 2em;
+  margin-top: 3em;
+  font-size: 1.2em;
+  line-height: 2em;
+  color: white;
+  outline: 0;
+  border: 1px solid white;
+  border-radius: 30px;
+  background-color: transparent;
+  transition: color .3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.cover .btn-changeFunc:hover {
+  color: black;
+}
+
+
+/* TO DO */
+.todo .todo-listWrap {
+  display: block;
+  width: 95%;
+  height: 95%;
+  background: rgba(141, 141, 141, .4);
+  border-radius: 30px;
+}
+.todo .todo-input {
+  width: 60%;
+  padding: 10px;
+  background-color: transparent;
+  color: white;
+  outline: 0;
+  border: 0;
+  border-bottom: 1px solid white;
+}
+.todo-input::placeholder {
+  font-family: play;
+  color: rgb(148, 148, 148);
+}
+
+
+/* STOPWATCH */
+.stopwatch .stopwatch-counter {
+  font-family: play;
+  color: white;
+  font-size: 4em;
+}
+
+/* TIMER */
+.timer .progress-bar {
+  position: relative;
+  width: 40vh;
+  height: 40vh;
+  color: transparent;
+  border: 8px solid gray;
+  border-radius: 50%;
+}
+
+/* 메인 페이지 이동 버튼 */
+
+/* 카운트다운 버튼과 겹친다 */
+
+.btn-cover {
+  position: absolute;
+  left: calc(50vw - 5em);
+  bottom: 20vh;
+width: 10em;
+height: 2em;
+font-size: 1.2em;
+line-height: 2em;
+color: white;
+outline: 0;
+border: 1px solid white;
+border-radius: 30px;
+background-color: transparent;
+transition: color .3s cubic-bezier(0.19, 1, 0.22, 1);
+z-index: 2;
+}
+.btn-cover:hover {
+  color: black;
+}
+
+/* 네비게이션 */
+nav {
+  position: fixed;
+  bottom: 30px;
+  right: 0;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 15vh;
+  background-color: rgba(0, 0, 0, .6);
+  z-index: 4;
+}
+nav > button {
+  box-sizing: border-box;
+  font-family: play;
+  font-size: 1.2em;
+  width: 20%;
+  height: 90%;
+  text-align: center;
+  overflow: hidden;
+  color: #ccc;
+  background-color: transparent;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin: .5em;
+  transition: all .3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+nav > button.active {
+  border-color: red;
+}
+@media screen and (max-width: 1000px) {
+  main {
+    font-size: 14px
+  }
+  .btn-sidebar {
+    display: block
+  }
+  nav {
+    bottom: 30px;
+    right: -25vw;
+    width: 25vw;
+    height: calc(100% - 30px);
+    flex-direction: column;
+    transition: right .5s ease;
+  }
+  nav > button {
+    width: 90%;
+    height: 20%;
+    font-size: 1em;
+  }
+  main > * {
+    height: 100vh;
+    margin-bottom: 0;
+  }
+  main section {
+    height: calc(100% - 100px);
+  }
+  .cover .quote {
+    font-size: 1.5em;
+  }
+  .cover .today {
+    font-size: 3em;
+  }
+  .cover .clock {
+    font-size: 4.8em;
+  }
+  
+}
+nav > button:before {
+  display: block;
+  font-family: "Material Icons";
+  font-weight: 400;
+  font-size: 60px;
+  margin-bottom: 10px; 
+}
+nav > button:hover {
+  border: 1px solid white;
+  color: white;
+}
+
+
+.btn-todo:before {
+  content: "\e241";
+}
+.btn-todo:hover:before {
+  animation: todoCheck 1s ease infinite alternate;
+  overflow: hidden;
+}
+@keyframes todoCheck {
+  0% {
+    height: 60px;
+  }
+  25% {
+    height: 50px;
+    margin-bottom: 20px;
+  }
+  75% {
+    height: 40px;
+    margin-bottom: 30px;
+  }
+  100% {
+    height: 25px;
+    margin-bottom: 45px;
+  }
+}
+.btn-weather:before {
+  content: "\e430";
+}
+.btn-weather:hover:before {
+  animation: weatherHot 1s infinite;
+}
+@keyframes weatherHot {
+  100% {
+    content: "\e3e4";
+    transform: translateY(-1px);
+  }
+}
+.btn-news:before {
+  content: "\e873";
+}
+.btn-news:hover:before {
+  animation: newsRotate .5s forwards, newsView 1s .5s infinite;
+}
+@keyframes newsRotate {
+  100%{ transform: rotate(-15deg)}
+}
+@keyframes newsView {
+  100% {
+    content: "\ea5a";
+  }
+}
+.btn-alarm:before {
+  content: "\e7f4";
+}
+.btn-alarm:hover:before {
+  animation: alarmRing 1s infinite;
+}
+@keyframes alarmRing {
+  0% {
+    content: "\e7f7";
+    transform: translateX(0);
+  }
+  25% {
+    content: "\e7f7";
+    transform: translateX(4px);
+  }
+  50% {
+    content: "\e7f7";
+    transform: translateX(0);
+  }
+  75% {
+    content: "\e7f7";
+    transform: translateX(-4px);
+  }
+  100% {
+    content: "\e7f7";
+    transform: translateX(0);
+  }
+}
+.btn-stopwatch:before {
+  content: "\e425";
+}
+.btn-stopwatch:hover:before {
+  animation: stopwatchRun 2s infinite;
+}
+@keyframes stopwatchRun {
+  0% {
+    content: "\e9c1";
+    transform: rotate(50deg);
+  }
+  100% {
+    content: "\e9c1";
+    transform: rotate(410deg);
+  }
+}
+.btn-timer:before {
+  content: "\ea5b";
+}
+.btn-timer:hover:before {
+  animation: hourglassRotate 2s infinite;
+}
+@keyframes hourglassRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    content:"\ea5c";
+    transform: rotate(0deg);
+  }
+  100% {
+    content:"\ea5c";
+    transform: rotate(180deg);
+  }
+}
+
+/* 푸터 */
+footer {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  background-color: black;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  z-index: 2;
+}
+footer > button {
+  font-family: play;
+  font-weight: bold;
+  color: white;
+  font-size: 15px;
+  letter-spacing: 2px;
+  background-color: transparent;
+  border: 0;
+}
