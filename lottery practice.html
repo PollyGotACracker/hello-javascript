@@ -19,8 +19,21 @@
   const {count, maxNumber} = SETTING;
   function getRandomNumber(num, max) {
     const numbers = new Set();
-    // for(let i = 0; i < num; i++)은 왜 제대로 안되는 걸까?
-    // numbers.size가 무엇인지? numbers not defined 오류
+    
+    // for(let i = numbers.size; i < num; i++)으로 하면
+    // getRandomNumber 반복 실행 시 numbers.size의 element 개수가 일정하지 않은 이유?
+    
+    /**
+    * Set 객체는 자료형과 관계없이 원시 값과 객체 참조 모두 유일한 값(unique element)을 저장한다.
+    * 따라서 Math.random()에서 중복값이 나올 때 문제가 발생하는 것 같다.
+    * 
+    * >> for문의 동작 순서를 제대로 몰랐던 것이 문제
+    * 초기화 -> 조건문 -> 조건이 참일 경우 실행문 실행 -> 증감문 ->
+    *     조건문 -> 조건이 참일 경우 실행문 실행 -> 증감문...
+    * 초기화는 for문 실행 시 첫 반복에만 이루어지므로, 
+    * 실제 numbers.size의 값과 상관없이 0~5까지 반복하게 된다.
+    */
+    
     while (numbers.size < num) {
       numbers.add(Math.floor(Math.random() * max) + 1);
     }
