@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    body {
+      background-color: rgb(38, 165, 87);
+    }
+    .sparrow {
+      display: block;
+      background: url("./images/sparrow00.png") left center;
+      animation: move 0.3s steps(2) infinite;
+      height: 64px;
+      width: 64px;
+    }
+    .reverse {
+      transform: scaleX(-1);
+      animation-play-state: paused;
+    }
+    @keyframes move {
+      100% {
+        background-position: -128px;
+      }
+    }
+  </style>
+  <body>
+    <div class="sparrow"></div>
+    <div class="sparrow reverse"></div>
+  </body>
+</html>
