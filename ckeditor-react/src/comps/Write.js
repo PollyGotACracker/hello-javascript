@@ -1,6 +1,8 @@
 // https://ckeditor.com/ckeditor-5/online-builder/
 // https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start-other.html#option-building-to-es5-target
+// https://ckeditor.com/docs/ckeditor5/latest/features/images/image-upload/image-upload.html
 // https://ckeditor.com/docs/ckeditor5/latest/installation/frameworks/react.html
+// 서버에서 임시(에디터에만 업로드),영구 이미지 저장 로직 구현해야
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
