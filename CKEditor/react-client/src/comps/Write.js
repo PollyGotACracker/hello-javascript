@@ -1,7 +1,6 @@
-import Editor from "ckeditor5-custom-build/build/ckeditor";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { useEffect, useState } from "react";
 import "../css/Write.css";
+import EditorModule from "./EditorModule";
 
 const Write = () => {
   const topicList = [
@@ -28,7 +27,7 @@ const Write = () => {
 
   const onChangeContentHandler = (e, editor) => {
     const data = editor.getData();
-    setPostData({ ...postData, content: data });
+    setPostData({ ...postData, [e.target.name]: data });
   };
 
   useEffect(() => {
@@ -64,19 +63,10 @@ const Write = () => {
         value={postData.title}
         onChange={onChangeHandler}
       />
-      <CKEditor
+      <EditorModule
         className="content"
-        editor={Editor}
-        config={Editor.defaultConfig}
-        data="<p></p>"
-        onReady={(editor) => {}}
-        onChange={onChangeContentHandler}
-        onBlur={(event, editor) => {
-          console.log("Blur.", editor);
-        }}
-        onFocus={(event, editor) => {
-          console.log("Focus.", editor);
-        }}
+        name="content"
+        onChangeHandler={onChangeContentHandler}
       />
 
       <button id="submit" type="button">
