@@ -12,6 +12,13 @@ const router = express.Router();
 /* GET home page. */
 router.post("/upload", async (req, res, next) => {
   console.log(req.body);
+  // ATTACH.create()
+  return res.send({ MESSAGE: "RES: IMAGE UPLOADED" });
+});
+
+router.post("/post/insert", async (req, res, next) => {
+  console.log(req.body);
+  return res.send({ MESSAGE: "RES: POST INSERT" });
 });
 
 export default router;

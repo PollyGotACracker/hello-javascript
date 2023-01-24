@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../css/Write.css";
 import EditorModule from "./EditorModule";
+import { submitPost } from "../service/post.service";
 
 const Write = () => {
   const topicList = [
@@ -27,7 +28,11 @@ const Write = () => {
 
   const onChangeContentHandler = (e, editor) => {
     const data = editor.getData();
-    setPostData({ ...postData, [e.target.name]: data });
+    setPostData({ ...postData, content: data });
+  };
+
+  const onClickHandler = (e) => {
+    submitPost(postData);
   };
 
   useEffect(() => {
@@ -63,13 +68,9 @@ const Write = () => {
         value={postData.title}
         onChange={onChangeHandler}
       />
-      <EditorModule
-        className="content"
-        name="content"
-        onChangeHandler={onChangeContentHandler}
-      />
+      <EditorModule handler={onChangeContentHandler} />
 
-      <button id="submit" type="button">
+      <button id="submit" type="button" onClick={onClickHandler}>
         등록
       </button>
     </form>
