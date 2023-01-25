@@ -6,18 +6,24 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 export const EditorModule = (props) => {
   const { handler, b_code } = props;
+  const BACKEND_URI = "http://localhost:3000";
 
+  // UploadAdapter Interface 를 implement 하여 CustomAdapter 구현
   class imageUploadAdapter {
     constructor(loader) {
-      // The file loader instance to use during the upload.
+      // 업로드 시 사용될 file loader 객체 인스턴스 생성
       this.loader = loader;
-      this.url = "/upload";
+      this.path = "/upload";
+      // application 이 build 되었을 경우 사용 가능
     }
 
-    // Starts the upload process.
+    // 업로드 method
     upload() {
       return this.loader.file.then(
         (file) =>
+          // Promise 객체 생성(pending; 비동기 처리가 수행되지 않은 상태)
+          // 콜백 함수 내에서 비동기 처리
+          // 콜백 함수는 resolve, reject 함수를 인수로 받아서 처리 성공 또는 실패 시 각각 호출
           new Promise((resolve, reject) => {
             this._initRequest();
             this._initListeners(resolve, reject, file);
@@ -26,26 +32,21 @@ export const EditorModule = (props) => {
       );
     }
 
-    // Aborts the upload process.
+    // 업로드 중단 method
     abort() {
       if (this.xhr) {
         this.xhr.abort();
       }
     }
 
-    // Initializes the XMLHttpRequest object using the URL passed to the constructor.
+    // XMLHttpRequest 객체(XHR) 생성 method
     _initRequest() {
       const xhr = (this.xhr = new XMLHttpRequest());
-
-      // Note that your request may look different. It is up to you and your editor
-      // integration to choose the right communication channel. This example uses
-      // a POST request with JSON as a data structure but your configuration
-      // could be different.
-      xhr.open("POST", this.url, true);
+      xhr.open("POST", this.path, true);
       xhr.responseType = "json";
     }
 
-    // Initializes XMLHttpRequest listeners.
+    // XMLHttpRequest 리스너 초기화 method
     _initListeners(resolve, reject, file) {
       const xhr = this.xhr;
       const loader = this.loader;
@@ -55,14 +56,9 @@ export const EditorModule = (props) => {
       xhr.addEventListener("abort", () => reject());
       xhr.addEventListener("load", () => {
         const response = xhr.response;
-        console.log(response);
 
-        // This example assumes the XHR server's "response" object will come with
-        // an "error" which has its own "message" that can be passed to reject()
-        // in the upload promise.
-        //
-        // Your integration may handle upload errors in a different way so make sure
-        // it is done properly. The reject() function must be called when the upload fails.
+        // response 객체의 값이 없거나 error 를 포함할 경우
+        // Promise.reject 실행(rejected;업로드 실패)
         if (!response || response.error) {
           return reject(
             response && response.error
@@ -75,8 +71,11 @@ export const EditorModule = (props) => {
         // at least the "default" URL, pointing to the image on the server.
         // This URL will be used to display the image in the content. Learn more in the
         // UploadAdapter#upload documentation.
+        // 위의 if 문에 걸리지 않으면 Promise.resolve 실행(fulfilled;업로드 성공)
+        // response 가 보낸 url 을 img tag 의 src 에 삽입
+        // /static 은 NodeJS 의 app.js 에서 설정한 /public 폴더
         resolve({
-          default: response.url,
+          default: `${BACKEND_URI}/static/uploads/${response.url}`,
         });
       });
 
@@ -93,9 +92,8 @@ export const EditorModule = (props) => {
       }
     }
 
-    // Prepares the data and sends the request.
+    // 데이터 생성 및 request 요청 method
     _sendRequest(file) {
-      // Prepare the form data.
       const data = new FormData();
       data.append("upload", file);
       data.append("bcode", b_code);
@@ -105,7 +103,6 @@ export const EditorModule = (props) => {
       // XMLHttpRequest.setRequestHeader() to set the request headers containing
       // the CSRF token generated earlier by your application.
 
-      // Send the request.
       this.xhr.send(data);
     }
   }

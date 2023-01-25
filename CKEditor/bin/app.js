@@ -42,6 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join("react-client/build")));
+app.use("/static", express.static("public"));
 
 // router link enable
 app.use("/", indexRouter);
