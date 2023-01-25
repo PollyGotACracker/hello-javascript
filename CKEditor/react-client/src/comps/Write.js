@@ -15,7 +15,7 @@ const Write = () => {
   const initPost = () => {
     const postData = {
       b_code: v4(),
-      username: "polly",
+      username: "polly@gmail.com",
       b_category: "",
       b_title: "",
       b_content: "",

@@ -42,6 +42,7 @@ router.post("/upload", fileUp.single("upload"), async (req, res, next) => {
 
 router.post("/post/insert", async (req, res, next) => {
   const data = req.body;
+  console.log(data);
   try {
     await BOARD.create(data);
 

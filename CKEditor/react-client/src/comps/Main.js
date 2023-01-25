@@ -1,5 +1,4 @@
 // 커뮤니티 초기 화면
-import { ClipboardDocumentListIcon } from "@heroicons/react/20/solid";
 import Rank from "./Rank";
 
 const Main = () => {
