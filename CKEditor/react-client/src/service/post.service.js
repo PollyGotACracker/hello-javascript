@@ -1,9 +1,8 @@
 export const submitPost = async (data) => {
-  const username = "polly";
   const fetchOption = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ data, username }),
+    body: JSON.stringify({ data }),
   };
   try {
     const response = await fetch("/post/insert", fetchOption);

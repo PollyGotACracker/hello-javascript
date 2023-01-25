@@ -57,6 +57,8 @@ module.exports = {
     }),
   ],
 
+  removePlugins: ["MediaEmbedToolbar"],
+
   module: {
     rules: [
       {

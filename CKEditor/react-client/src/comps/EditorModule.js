@@ -5,7 +5,7 @@ import Editor from "ckeditor5-custom-build/build/ckeditor";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
 export const EditorModule = (props) => {
-  const { handler } = props;
+  const { handler, b_code } = props;
 
   class imageUploadAdapter {
     constructor(loader) {
@@ -42,11 +42,6 @@ export const EditorModule = (props) => {
       // a POST request with JSON as a data structure but your configuration
       // could be different.
       xhr.open("POST", this.url, true);
-      // application/x-www-form-urlencoded 가 아닐 경우 req.body가 빈 객체...
-      xhr.setRequestHeader(
-        "Content-type",
-        "multipart/form-data; charset=utf-8"
-      );
       xhr.responseType = "json";
     }
 
@@ -103,6 +98,7 @@ export const EditorModule = (props) => {
       // Prepare the form data.
       const data = new FormData();
       data.append("upload", file);
+      data.append("bcode", b_code);
 
       // Important note: This is the right place to implement security mechanisms
       // like authentication and CSRF protection. For instance, you can use
@@ -114,43 +110,16 @@ export const EditorModule = (props) => {
     }
   }
 
-  // function uploadAdapterPlugin(editor) {
-  //   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-  //     // Configure the URL to the upload script in your back-end here!
-  //     return new imageUploadAdapter(loader);
-  //   };
-  // }
-
-  // Editor.create(document.querySelector("#editor"), {
-  //   extraPlugins: [uploadAdapterPlugin],
-  // }).catch((error) => {
-  //   console.log(error);
-  // });
-
   return (
     <CKEditor
       editor={Editor}
-      config={{
-        simpleUpload: {
-          // The URL that the images are uploaded to.
-          uploadUrl: "/upload",
-
-          // Enable the XMLHttpRequest.withCredentials property.
-          withCredentials: true,
-
-          // Headers sent along with the XMLHttpRequest to the upload server.
-          headers: {
-            "X-CSRF-TOKEN": "CSRF-Token",
-            Authorization: "Bearer <JSON Web Token>",
-          },
-        },
-      }}
+      config={Editor.defaultConfig}
       data="<p></p>"
-      // onReady={(editor) => {
-      //   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      //     return new imageUploadAdapter(loader);
-      //   };
-      // }}
+      onReady={(editor) => {
+        editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+          return new imageUploadAdapter(loader);
+        };
+      }}
       onChange={handler}
       onBlur={handler}
       onFocus={(event, editor) => {

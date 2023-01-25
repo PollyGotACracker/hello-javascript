@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import "../css/Write.css";
 import EditorModule from "./EditorModule";
 import { submitPost } from "../service/post.service";
+import { v4 } from "uuid";
 
 const Write = () => {
-  const topicList = [
+  const catList = [
     { eng: "hobbies", kor: "취미" },
     { eng: "learning", kor: "학습" },
     { eng: "economics", kor: "경제" },
@@ -13,9 +14,11 @@ const Write = () => {
 
   const initPost = () => {
     const postData = {
-      topic: "",
-      title: "",
-      content: "",
+      b_code: v4(),
+      username: "polly",
+      b_category: "",
+      b_title: "",
+      b_content: "",
     };
     return postData;
   };
@@ -28,7 +31,7 @@ const Write = () => {
 
   const onChangeContentHandler = (e, editor) => {
     const data = editor.getData();
-    setPostData({ ...postData, content: data });
+    setPostData({ ...postData, b_content: data });
   };
 
   const onClickHandler = (e) => {
@@ -40,17 +43,17 @@ const Write = () => {
   }, [postData]);
 
   // topicList 배열을 이용하여 checkbox 요소 동적 추가
-  const checkboxList = topicList.map((topic) => {
+  const checkboxList = catList.map((cat) => {
     return (
-      <div className="topic-item" key={topic.eng}>
+      <div className="topic-item" key={cat.eng}>
         <input
           type="radio"
-          id={topic.eng}
-          value={topic.eng}
-          name="topic"
+          id={cat.eng}
+          value={cat.eng}
+          name="b_category"
           onChange={onChangeHandler}
         />
-        <label htmlFor={topic.eng}>{topic.kor}</label>
+        <label htmlFor={cat.eng}>{cat.kor}</label>
       </div>
     );
   });
@@ -63,13 +66,12 @@ const Write = () => {
       </div>
       <input
         className="title"
-        name="title"
+        name="b_title"
         placeholder="제목"
-        value={postData.title}
+        value={postData.b_title}
         onChange={onChangeHandler}
       />
-      <EditorModule handler={onChangeContentHandler} />
-
+      <EditorModule handler={onChangeContentHandler} b_code={postData.b_code} />
       <button id="submit" type="button" onClick={onClickHandler}>
         등록
       </button>
