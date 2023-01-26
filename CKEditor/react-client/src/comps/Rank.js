@@ -7,15 +7,15 @@ const Rank = ({ data }) => {
   const RankItem = () => {
     return data.map((item) => {
       keyRef.current++;
-      const content = item?.b_content;
-      let imgSrc = "";
-      if (content) {
-        const imgStartIdx = content.indexOf("![](");
-        if (imgStartIdx > -1) {
-          const imgLastIdx = item?.b_content.indexOf(")", imgStartIdx);
-          imgSrc = item?.b_content.slice(imgStartIdx + 4, imgLastIdx);
-        }
-      }
+      // const content = item?.b_content;
+      // let imgSrc = "";
+      // if (content) {
+      //   const imgStartIdx = content.indexOf("![](");
+      //   if (imgStartIdx > -1) {
+      //     const imgLastIdx = item?.b_content.indexOf(")", imgStartIdx);
+      //     imgSrc = item?.b_content.slice(imgStartIdx + 4, imgLastIdx);
+      //   }
+      // }
 
       return (
         <div className="rank-item" key={keyRef.current}>
