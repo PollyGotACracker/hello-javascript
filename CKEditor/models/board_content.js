@@ -38,12 +38,12 @@ export default (sequelize) => {
           "(date_format(now(),_utf8mb4'%H:%i:%S'))"
         ),
       },
-      b_update: {
+      b_updated: {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,
         defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      b_delete: {
+      b_deleted: {
         type: Sequelize.DataTypes.STRING(10),
         allowNull: true,
       },

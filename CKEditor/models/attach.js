@@ -13,11 +13,9 @@ export default (sequelize) => {
         allowNull: true,
       },
       a_date: {
-        type: Sequelize.DataTypes.STRING(10),
-        allowNull: true,
-        defaultValue: Sequelize.Sequelize.literal(
-          "(date_format(now(),_utf8mb4'%Y-%m-%d'))"
-        ),
+        type: Sequelize.DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       a_original_name: {
         type: Sequelize.DataTypes.STRING(256),

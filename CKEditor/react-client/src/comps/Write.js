@@ -5,13 +5,6 @@ import { submitPost } from "../service/post.service";
 import { v4 } from "uuid";
 
 const Write = () => {
-  const catList = [
-    { eng: "hobbies", kor: "취미" },
-    { eng: "learning", kor: "학습" },
-    { eng: "economics", kor: "경제" },
-    { eng: "health", kor: "건강" },
-  ];
-
   const initPost = () => {
     const postData = {
       b_code: v4(),
@@ -19,6 +12,8 @@ const Write = () => {
       b_category: "",
       b_title: "",
       b_content: "",
+      b_category: "동물",
+      b_group: "C2",
     };
     return postData;
   };
@@ -42,28 +37,8 @@ const Write = () => {
     console.log(postData);
   }, [postData]);
 
-  // topicList 배열을 이용하여 checkbox 요소 동적 추가
-  const checkboxList = catList.map((cat) => {
-    return (
-      <div className="topic-item" key={cat.eng}>
-        <input
-          type="radio"
-          id={cat.eng}
-          value={cat.eng}
-          name="b_category"
-          onChange={onChangeHandler}
-        />
-        <label htmlFor={cat.eng}>{cat.kor}</label>
-      </div>
-    );
-  });
-
   return (
     <form className="post-editor">
-      <div className="topic-group">
-        <div>카테고리</div>
-        {checkboxList}
-      </div>
       <input
         className="title"
         name="b_title"

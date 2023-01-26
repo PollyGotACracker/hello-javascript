@@ -1,22 +1,35 @@
-import { useState } from "react";
+import { useRef } from "react";
 // 추천수(또는 조회수) 랭킹 : Main 과 Category 에 포함
 
-const Rank = (props) => {
-  const [itemKey, setItemKey] = useState(0);
+const Rank = ({ data }) => {
+  const keyRef = useRef(0);
 
   const RankItem = () => {
-    // map 사용하여 추가
+    return data.map((item) => {
+      keyRef.current++;
+      const content = item?.b_content;
+      let imgSrc = "";
+      if (content) {
+        const imgStartIdx = content.indexOf("![](");
+        if (imgStartIdx > -1) {
+          const imgLastIdx = item?.b_content.indexOf(")", imgStartIdx);
+          imgSrc = item?.b_content.slice(imgStartIdx + 4, imgLastIdx);
+        }
+      }
 
-    // setItemKey(itemKey + 1);
-    return (
-      // <div className="rank-item" key={itemKey}>
-      <div className="rank-item">
-        <img />
-        <div>제목</div>
-        <div>댓글 수</div>
-        <div>내용 요약</div>
-      </div>
-    );
+      return (
+        <div className="rank-item" key={keyRef.current}>
+          <div>
+            <img src={`/static/uploads/${item["attachs.thumb"]}`} />
+          </div>
+          <div>
+            <div>{item.b_title}</div>
+            <div> [{item.count}]</div>
+          </div>
+          <div>{item.b_content}</div>
+        </div>
+      );
+    });
   };
 
   return (
