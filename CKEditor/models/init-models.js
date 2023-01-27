@@ -9,11 +9,11 @@ const initModels = (sequelize) => {
   const reply = _reply(sequelize);
   const upvote = _upvote(sequelize);
 
-  board_content.hasMany(attach, { as: "attachs", foreignKey: "b_code" });
-  attach.belongsTo(board_content, {
-    as: "post",
-    foreignKey: "b_code",
-  });
+  // board_content.hasMany(attach, { as: "attachs", foreignKey: "b_code" });
+  // attach.belongsTo(board_content, {
+  //   as: "post",
+  //   foreignKey: "b_code",
+  // });
 
   return {
     attach,

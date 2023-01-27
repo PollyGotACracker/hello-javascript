@@ -7,26 +7,24 @@ const Rank = ({ data }) => {
   const RankItem = () => {
     return data.map((item) => {
       keyRef.current++;
-      // const content = item?.b_content;
-      // let imgSrc = "";
-      // if (content) {
-      //   const imgStartIdx = content.indexOf("![](");
-      //   if (imgStartIdx > -1) {
-      //     const imgLastIdx = item?.b_content.indexOf(")", imgStartIdx);
-      //     imgSrc = item?.b_content.slice(imgStartIdx + 4, imgLastIdx);
-      //   }
-      // }
 
       return (
-        <div className="rank-item" key={keyRef.current}>
-          <div>
+        <div
+          // to={`/community/${item.b_cat_eng}/${b_code}`}
+          className="rank-item"
+          key={keyRef.current}
+        >
+          {/* <div>
             <img src={`/static/uploads/${item["attachs.thumb"]}`} />
-          </div>
+          </div> */}
+          {/* 나중에 nickname으로 수정 */}
+          <div>{item.username}</div>
           <div>
-            <div>{item.b_title}</div>
-            <div> [{item.count}]</div>
+            <div>{item.r_count || "0"}</div>
+            <span>{item.b_upvote}</span>
           </div>
-          <div>{item.b_content}</div>
+          <div>{item.b_title}</div>
+          <div>{item.b_category}</div>
         </div>
       );
     });

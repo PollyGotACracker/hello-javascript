@@ -7,11 +7,11 @@ const Main = () => {
   const [rankData, setRankData] = useState([]);
 
   useLayoutEffect(() => {
-    const fetch = async () => {
+    (async () => {
       const result = await getMainPosts();
       if (result) setRankData([...result.data]);
-    };
-    fetch();
+      return null;
+    })();
   }, []);
 
   console.log(rankData);

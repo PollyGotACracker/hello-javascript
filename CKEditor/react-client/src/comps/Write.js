@@ -11,7 +11,7 @@ const Write = () => {
       username: "polly@gmail.com",
       b_title: "",
       b_content: "",
-      b_category: "동물",
+      b_category: "C21",
       b_group: "C2",
     };
     return postData;
