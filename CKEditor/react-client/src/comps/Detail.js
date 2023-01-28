@@ -1,16 +1,11 @@
 // 게시글 상세보기
 import List from "./List";
 import Reply from "./Reply";
+import "../css/Detail.css";
 import { useState, useLayoutEffect } from "react";
 import { getDetailPost } from "../service/post.service";
 
 // html tag -> entity -> tag 로 변환하는 과정 필요
-// style 별도로 지정해야
-// blockquote, figure, table, ul, ol, li
-// text-huge 등 text size 관련 className(text size 삭제?)
-
-// oembed 를 iframe 으로 변환해야 한다.
-// <figure class="media"><oembed url="동영상 주소"></oembed></figure>
 
 const Detail = () => {
   const [postData, setPostData] = useState({});
@@ -18,7 +13,7 @@ const Detail = () => {
   useLayoutEffect(() => {
     (async () => {
       // 임시 게시글 코드
-      const bCode = "27a04ef7-2dad-467b-a078-d3a502c7e79c";
+      const bCode = "a7236b4e-aa4d-4db9-a9db-7e7012eea8a9";
       const result = await getDetailPost(bCode);
       if (result) setPostData({ ...result });
       return null;

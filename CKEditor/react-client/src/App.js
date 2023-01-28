@@ -2,7 +2,6 @@ import "./css/App.css";
 import Main from "./comps/Main.js";
 import Write from "./comps/Write.js";
 import Detail from "./comps/Detail.js";
-import Reply from "./comps/Reply.js";
 
 function App() {
   return (

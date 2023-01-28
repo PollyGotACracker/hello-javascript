@@ -107,10 +107,15 @@ export const EditorModule = (props) => {
     }
   }
 
+  // mediaEmbed: 미디어(영상) 링크 embed 하여 게시글 저장 시 oembed 대신 iframe tag 로 저장
   return (
     <CKEditor
       editor={Editor}
-      config={Editor.defaultConfig}
+      config={{
+        mediaEmbed: {
+          previewsInData: true,
+        },
+      }}
       data="<p></p>"
       onReady={(editor) => {
         editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
