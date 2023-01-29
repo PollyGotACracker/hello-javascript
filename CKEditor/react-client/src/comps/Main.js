@@ -14,8 +14,6 @@ const Main = () => {
     })();
   }, []);
 
-  console.log(rankData);
-
   // component 함수는 비동기로 실행되서는 안된다(async, await X).
   const MainItem = () => {
     return rankData.map((item) => {

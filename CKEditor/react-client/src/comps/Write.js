@@ -1,23 +1,18 @@
-import { useEffect, useState } from "react";
 import "../css/Write.css";
 import EditorModule from "./EditorModule";
 import { submitPost } from "../service/post.service";
-import { v4 } from "uuid";
+import { usePostContext } from "../context/PostContextProvider";
 
 const Write = () => {
-  const initPost = () => {
-    const postData = {
-      b_code: v4(),
-      username: "polly@gmail.com",
-      b_title: "",
-      b_content: "",
-      b_category: "C21",
-      b_group: "C2",
-    };
-    return postData;
-  };
+  // 카테고리, 그룹 값은 이전 페이지(게시판)에서 가져옴
+  // detail 페이지에서 fetch 데이터를 전역 context 에 저장해야 함
+  // session 체크해서 게시글의 username 과 일치할 경우 수정 삭제 버튼 표시
+  // 현재 경로를 체크해서 새로 글쓰는 경우와 수정하는 경우 분리
+  // 수정은 저장된 postData 가져옴
+  // 새로 글쓰기 전후로 postData 초기화해야
+  // ckEditor setData 또는 initData 사용
 
-  const [postData, setPostData] = useState(initPost);
+  const { postData, setPostData } = usePostContext();
 
   const onChangeHandler = (e) => {
     setPostData({ ...postData, [e.target.name]: e.target.value });
@@ -28,13 +23,9 @@ const Write = () => {
     setPostData({ ...postData, b_content: data });
   };
 
-  const onClickHandler = (e) => {
+  const onClickHandler = () => {
     submitPost(postData);
   };
-
-  useEffect(() => {
-    console.log(postData);
-  }, [postData]);
 
   return (
     <form className="post-editor">
@@ -45,7 +36,11 @@ const Write = () => {
         value={postData.b_title}
         onChange={onChangeHandler}
       />
-      <EditorModule handler={onChangeContentHandler} b_code={postData.b_code} />
+      <EditorModule
+        data={postData.b_content}
+        handler={onChangeContentHandler}
+        b_code={postData.b_code}
+      />
       <button id="submit" type="button" onClick={onClickHandler}>
         등록
       </button>

@@ -1,23 +1,27 @@
 // 게시글 목록: Category 와 Detail 에 포함
-const List = () => {
+const List = ({ data }) => {
   const ListItem = () => {
-    // map 사용하여 추가
-    return (
-      <li className="list-item">
-        <span>번호</span>
-        <span>제목</span>
-        <span>댓글수</span>
-        <span>작성자</span>
-        <span>작성일자</span>
-        <span>조회수</span>
-        <span>추천수</span>
-      </li>
-    );
+    return data.map((item) => {
+      return (
+        <li className="list-item" key={item.b_code}>
+          <div className="title">{item.b_title}</div>
+          <div className="date">{`${item.b_date} ${item.b_time}`}</div>
+          <div className="nickname">{item.username}</div>
+          <div className="detail-box">
+            <span>{item.b_views}</span>
+            <span>{item.b_replies}</span>
+            <span>{item.b_upvote}</span>
+          </div>
+        </li>
+      );
+    });
   };
 
   return (
     <section className="commu-list">
-      <ListItem />
+      <ul className="item-wrapper">
+        <ListItem />
+      </ul>
     </section>
   );
 };

@@ -4,8 +4,7 @@
 import Editor from "ckeditor5-custom-build/build/ckeditor";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-export const EditorModule = (props) => {
-  const { handler, b_code } = props;
+export const EditorModule = ({ data, handler, b_code }) => {
   const BACKEND_URI = "http://localhost:3000";
 
   // UploadAdapter Interface 를 implement 하여 CustomAdapter 구현
@@ -118,9 +117,12 @@ export const EditorModule = (props) => {
       }}
       data="<p></p>"
       onReady={(editor) => {
+        // adapter plugin
         editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
           return new imageUploadAdapter(loader);
         };
+        // 게시글 수정 시 editor 에 게시글 data(context 의 postData.b_content) setting
+        editor.setData(data);
       }}
       onChange={handler}
       onBlur={handler}

@@ -24,12 +24,12 @@ const ReplyItem = ({ data, item }) => {
           {item.r_parent_code === item.r_code ? (
             <ReplyItem ref={itemRef} item={item} style={{ display: "none" }} />
           ) : null}
+          <div className="reply-input-box">
+            <input />
+            <button>게시</button>
+          </div>
         </>
       )}
-      <div className="reply-input-box">
-        <input />
-        <button>게시</button>
-      </div>
     </li>
   );
 };
