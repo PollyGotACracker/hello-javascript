@@ -14,8 +14,10 @@ const ReplyItem = ({ data, item }) => {
       <img alt="프로필 이미지" />
       <span>{item.username}</span>
       <div>{item.r_content || "삭제된 댓글입니다."}</div>
-      <button>수정</button>
-      <button>삭제</button>
+      <div>
+        <button>수정</button>
+        <button>삭제</button>
+      </div>
       {item.r_content && (
         <>
           <button onClick={ShowChildReply}>

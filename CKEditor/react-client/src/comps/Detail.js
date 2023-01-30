@@ -33,7 +33,6 @@ const Detail = () => {
         setUpvote(postResult.b_upvote);
         setReplyList([...replyResult.replyList]);
         setReplyCount(replyResult.replyCount.b_replies);
-        setReplyData({ ...replyData, b_code: bCode });
       }
       return null;
     })();
@@ -47,7 +46,7 @@ const Detail = () => {
   };
 
   const onChangeHandler = (e) => {
-    setReplyData({ ...replyData, r_content: e.target.value });
+    setReplyData({ ...replyData, b_code: bCode, r_content: e.target.value });
   };
 
   const onClickReply = async () => {
