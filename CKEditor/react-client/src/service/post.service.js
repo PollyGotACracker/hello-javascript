@@ -37,7 +37,7 @@ export const getMainPosts = async () => {
 
 export const getBoardPosts = async (bCode) => {
   try {
-    const response = await fetch(`/cat/${bCode}/get`);
+    const response = await fetch(`/board/${bCode}/get`);
     const result = await response.json();
     return result;
   } catch (err) {

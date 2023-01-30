@@ -106,7 +106,7 @@ router.get("/posts/get", async (req, res) => {
 });
 
 // community category fetch
-router.get("/cat/:bCode/get", async (req, res) => {
+router.get("/board/:bCode/get", async (req, res) => {
   const bCode = req.params.bCode;
   try {
     const data = await POST.findAll({
