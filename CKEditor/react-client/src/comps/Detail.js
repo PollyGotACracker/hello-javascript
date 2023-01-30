@@ -22,17 +22,17 @@ const Detail = () => {
   const [replyCount, setReplyCount] = useState(null);
   const [replyList, setReplyList] = useState([]);
 
-  const bCode = "e4b9ae36-02b0-4728-9742-9bb4ae636eca";
+  const pCode = "831a670d-e0fd-4c88-9c19-2f10b101cade";
 
   useLayoutEffect(() => {
     (async () => {
-      const postResult = await getDetailPost(bCode);
-      const replyResult = await getReply(bCode);
+      const postResult = await getDetailPost(pCode);
+      const replyResult = await getReply(pCode);
       if (postResult) {
         setPostData({ ...postResult });
-        setUpvote(postResult.b_upvote);
+        setUpvote(postResult.p_upvote);
         setReplyList([...replyResult.replyList]);
-        setReplyCount(replyResult.replyCount.b_replies);
+        setReplyCount(replyResult.replyCount.p_replies);
       }
       return null;
     })();
@@ -41,19 +41,19 @@ const Detail = () => {
   const onClickUpvote = async () => {
     // 임시 username(session context 에서)
     const username = "polly@gmail.com";
-    const result = await upvotePost(bCode, username);
+    const result = await upvotePost(pCode, username);
     if (result) setUpvote(upvote + result[0]);
   };
 
   const onChangeHandler = (e) => {
-    setReplyData({ ...replyData, b_code: bCode, r_content: e.target.value });
+    setReplyData({ ...replyData, p_code: pCode, r_content: e.target.value });
   };
 
   const onClickReply = async () => {
     const result = await insertReply(replyData);
     if (result) {
       setReplyList([...result.replyList]);
-      setReplyCount(result.replyCount.b_replies);
+      setReplyCount(result.replyCount.p_replies);
       setReplyData(initReply);
     }
   };
@@ -64,9 +64,9 @@ const Detail = () => {
         <section className="category">카테고리</section>
 
         <section>
-          <div className="title ">{postData.b_title}</div>
-          <span>{postData.b_views}</span>
-          <span>{postData.b_upvote}</span>
+          <div className="title ">{postData.p_title}</div>
+          <span>{postData.p_views}</span>
+          <span>{postData.p_upvote}</span>
           <span>{postData.r_count || "0"}</span>
         </section>
 
@@ -74,13 +74,13 @@ const Detail = () => {
           <img alt="프로필 이미지" />
           {/* 나중에 nickname으로 수정 */}
           <div className="nickname">{postData.username}</div>
-          <span>{`${postData.b_date} ${postData.b_time}`}</span>
+          <span>{`${postData.p_date} ${postData.p_time}`}</span>
         </section>
 
         <section>
           <div
             className="content"
-            dangerouslySetInnerHTML={{ __html: postData.b_content }}
+            dangerouslySetInnerHTML={{ __html: postData.p_content }}
           ></div>
           <button onClick={onClickUpvote}>
             <div>{upvote}</div>

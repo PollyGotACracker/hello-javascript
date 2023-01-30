@@ -1,5 +1,5 @@
 import Sequelize from "sequelize";
-export default (sequelize) => {
+export default (sequelize, DataTypes) => {
   return sequelize.define(
     "reply",
     {
@@ -8,7 +8,7 @@ export default (sequelize) => {
         allowNull: false,
         primaryKey: true,
       },
-      b_code: {
+      p_code: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: true,
       },

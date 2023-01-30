@@ -4,7 +4,7 @@
 import Editor from "ckeditor5-custom-build/build/ckeditor";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-export const EditorModule = ({ data, handler, b_code }) => {
+export const EditorModule = ({ data, handler, code }) => {
   const BACKEND_URI = "http://localhost:3000";
 
   // UploadAdapter Interface 를 implement 하여 CustomAdapter 구현
@@ -95,7 +95,7 @@ export const EditorModule = ({ data, handler, b_code }) => {
     _sendRequest(file) {
       const data = new FormData();
       data.append("upload", file);
-      data.append("bcode", b_code);
+      data.append("pcode", code);
 
       // Important note: This is the right place to implement security mechanisms
       // like authentication and CSRF protection. For instance, you can use

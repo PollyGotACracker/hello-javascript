@@ -3,17 +3,17 @@
 import List from "./List";
 import "../css/community/Category.css";
 import { useState, useLayoutEffect } from "react";
-import { getCatPosts } from "../service/post.service";
+import { getBoardPosts } from "../service/post.service";
 
 const Category = () => {
   // 임시 카테고리 코드
-  const catCode = "C21";
-  const [catList, setCatList] = useState([]);
+  const bCode = "C21";
+  const [boardList, setBoardList] = useState([]);
   useLayoutEffect(() => {
     (async () => {
-      const result = await getCatPosts(catCode);
+      const result = await getBoardPosts(bCode);
       if (result) {
-        setCatList([...result]);
+        setBoardList([...result]);
       }
       return null;
     })();
@@ -35,7 +35,7 @@ const Category = () => {
         </div>
         <button>글쓰기</button>
       </section>
-      <List data={catList} />
+      <List data={boardList} />
     </main>
   );
 };

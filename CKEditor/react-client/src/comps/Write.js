@@ -20,7 +20,7 @@ const Write = () => {
 
   const onChangeContentHandler = (e, editor) => {
     const data = editor.getData();
-    setPostData({ ...postData, b_content: data });
+    setPostData({ ...postData, p_content: data });
   };
 
   const onClickHandler = () => {
@@ -31,15 +31,15 @@ const Write = () => {
     <form className="post-editor">
       <input
         className="title"
-        name="b_title"
+        name="p_title"
         placeholder="제목"
-        value={postData.b_title}
+        value={postData.p_title}
         onChange={onChangeHandler}
       />
       <EditorModule
-        data={postData.b_content}
+        data={postData.p_content}
         handler={onChangeContentHandler}
-        b_code={postData.b_code}
+        code={postData.p_code}
       />
       <button id="submit" type="button" onClick={onClickHandler}>
         등록

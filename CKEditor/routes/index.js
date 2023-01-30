@@ -1,18 +1,20 @@
 import express from "express";
+import sequelize from "sequelize";
+import { Op } from "sequelize";
 import fileUp from "../modules/file_upload.js";
 import DB from "../models/index.js";
 import fs from "fs";
 import path from "path";
 import { v4 } from "uuid";
 
-const BOARD = DB.models.board_content;
+const POST = DB.models.post;
 const ATTACH = DB.models.attach;
 const UPVOTE = DB.models.upvote;
 const REPLY = DB.models.reply;
 
 const router = express.Router();
 
-const catList = [
+const bList = [
   {
     group: "C1",
     eng: "general",
@@ -66,7 +68,7 @@ router.get("/posts/get", async (req, res) => {
     // 데이터를 객체에 담을 때
     // let data = {};
     // for (let prop in catList) {
-    //   data[`${prop}`] = await BOARD.findAll({
+    //   data[`${prop}`] = await POST.findAll({
     //     where: { b_group: `${prop}` },
     //     limit: 5,
     //     subQuery: false,
@@ -75,49 +77,51 @@ router.get("/posts/get", async (req, res) => {
     //   });
     // }
 
-    // BOARD-ATTACH 관계 설정할 경우 에디터에 이미지를 등록할 때
+    // POST-ATTACH 관계 설정할 경우 에디터에 이미지를 등록할 때
     // 게시글보다 첨부파일이 먼저 등록되므로 INSERT 되지 않는 문제 발생
     let data = [];
-    for (let cat of catList) {
+    for (let board of bList) {
       let items = {};
-      items.code = `${cat.group}`;
-      items.name = `${cat.kor}`;
-      items.posts = await BOARD.findAll({
-        where: { [Op.and]: [{ b_group: `${cat.group}` }, { b_deleted: null }] },
+      items.code = `${board.group}`;
+      items.name = `${board.kor}`;
+      items.posts = await POST.findAll({
+        where: {
+          [Op.and]: [{ b_group_code: `${board.group}` }, { p_deleted: null }],
+        },
         limit: 5,
         subQuery: false,
         order: [
-          ["b_upvote", "DESC"],
-          ["b_date", "DESC"],
+          ["p_upvote", "DESC"],
+          ["p_date", "DESC"],
         ],
         raw: true,
       });
       data.push(items);
     }
 
-    return res.status(200).send({ catList, data });
+    return res.status(200).send(data);
   } catch (err) {
     console.error(err);
   }
 });
 
 // community category fetch
-router.get("/cat/:catCode/get", async (req, res) => {
-  const cat = req.params.catCode;
+router.get("/cat/:bCode/get", async (req, res) => {
+  const bCode = req.params.bCode;
   try {
-    const data = await BOARD.findAll({
+    const data = await POST.findAll({
       attributes: [
-        "b_code",
-        "b_title",
-        "b_replies",
+        "p_code",
+        "p_title",
+        "p_replies",
         "username",
-        "b_date",
-        "b_time",
-        "b_views",
-        "b_upvote",
+        "p_date",
+        "p_time",
+        "p_views",
+        "p_upvote",
       ],
-      where: { [Op.and]: [{ b_category: cat }, { b_deleted: null }] },
-      order: [["b_date", "DESC"]],
+      where: { [Op.and]: [{ b_code: bCode }, { p_deleted: null }] },
+      order: [["p_date", "DESC"]],
     });
     return res.status(200).send(data);
   } catch (err) {
@@ -126,11 +130,11 @@ router.get("/cat/:catCode/get", async (req, res) => {
 });
 
 // community Detail fetch
-router.get("/post/:bCode/get", async (req, res) => {
+router.get("/post/:pCode/get", async (req, res) => {
   try {
-    const bCode = req.params?.bCode;
-    const postData = await BOARD.findByPk(bCode);
-    const result = await postData.increment("b_views", { by: 1 });
+    const pCode = req.params?.pCode;
+    const postData = await POST.findByPk(pCode);
+    const result = await postData.increment("p_views", { by: 1 });
     console.log(result);
     return res.status(200).send(result);
   } catch (err) {
@@ -145,14 +149,14 @@ router.get("/post/:bCode/get", async (req, res) => {
 router.post("/upload", fileUp.single("upload"), async (req, res, next) => {
   console.log("file", req.file);
   // 게시글 uuid
-  console.log("code", req.body.bcode);
+  console.log("code", req.body.pcode);
 
   try {
     const file = req.file;
-    const bcode = req.body.bcode;
+    const pcode = req.body.pcode;
     const uploadFileInfo = {
       a_code: v4(),
-      b_code: bcode,
+      p_code: pcode,
       a_original_name: file.originalname,
       a_save_name: file.filename,
       a_ext: file.mimetype,
@@ -171,7 +175,7 @@ router.post("/upload", fileUp.single("upload"), async (req, res, next) => {
 router.post("/post/insert", async (req, res) => {
   const data = req.body;
   try {
-    await BOARD.create(data);
+    await POST.create(data);
 
     return res.send({ MESSAGE: "POST INSERT" });
   } catch (err) {
@@ -179,10 +183,10 @@ router.post("/post/insert", async (req, res) => {
   }
 });
 
-router.get("/post/:bCode/delete", async (req, res, next) => {
-  const bCode = req.params.bCode;
+router.get("/post/:pCode/delete", async (req, res, next) => {
+  const pCode = req.params.pCode;
   try {
-    await BOARD.update({ b_deleted: "" }, { where: { b_code: bCode } });
+    await POST.update({ p_deleted: "" }, { where: { p_code: pCode } });
     // 첨부파일, 댓글
 
     return res.send({ MESSAGE: "게시글이 삭제되었습니다." });
@@ -200,9 +204,9 @@ router.patch("/post/upvote", async (req, res, next) => {
     return res.send({ MESSAGE: "이미 추천한 게시글입니다." });
   }
   try {
-    const result = await BOARD.update(
-      { b_upvote: sequelize.literal("b_upvote + 1") },
-      { where: { b_code: req.body.b_code } }
+    const result = await POST.update(
+      { p_upvote: sequelize.literal("b_upvote + 1") },
+      { where: { p_code: req.body.p_code } }
     );
     return res.send(result);
   } catch (err) {
@@ -210,21 +214,21 @@ router.patch("/post/upvote", async (req, res, next) => {
   }
 });
 
-router.get("/reply/:bCode/get", async (req, res) => {
-  const bCode = req.params.bCode;
+router.get("/reply/:pCode/get", async (req, res) => {
+  const pCode = req.params.pCode;
   try {
     // 게시글의 모든 댓글
     const replyList = await REPLY.findAll({
-      where: { [Op.and]: [{ b_code: bCode }, { r_deleted: null }] },
+      where: { [Op.and]: [{ p_code: pCode }, { r_deleted: null }] },
       order: [
         ["r_date", "DESC"],
         ["r_time", "DESC"],
       ],
     });
     // 게시글의 최상위 댓글 수
-    const replyCount = await BOARD.findOne({
-      attributes: ["b_replies"],
-      where: { b_code: bCode },
+    const replyCount = await POST.findOne({
+      attributes: ["p_replies"],
+      where: { p_code: pCode },
     });
 
     return res.send({ replyList, replyCount });
@@ -238,10 +242,10 @@ router.post("/reply/insert", async (req, res) => {
   try {
     const result = await REPLY.create(data);
     // r_parent_code 가 null 일 경우(최상위 댓글일 경우)
-    if (!data.r_parent_code) {
-      await BOARD.update(
-        { b_replies: sequelize.literal("b_replies + 1") },
-        { where: { b_code: req.body.b_code } }
+    if (result && !data.r_parent_code) {
+      await POST.update(
+        { p_replies: sequelize.literal("p_replies + 1") },
+        { where: { p_code: req.body.p_code } }
       );
     }
 

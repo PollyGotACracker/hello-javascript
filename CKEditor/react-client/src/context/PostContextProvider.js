@@ -10,12 +10,12 @@ export const usePostContext = () => {
 export const PostContextProvider = ({ children }) => {
   const initPost = () => {
     const postData = {
-      b_code: v4(),
+      p_code: v4(),
       username: "polly@gmail.com",
-      b_title: "",
-      b_content: "",
-      b_category: "C21",
-      b_group: "C2",
+      p_title: "",
+      p_content: "",
+      b_code: "C21",
+      b_group_code: "C2",
     };
     return postData;
   };
@@ -23,7 +23,7 @@ export const PostContextProvider = ({ children }) => {
   const initReply = () => {
     const replyData = {
       r_code: v4(),
-      b_code: "",
+      p_code: "",
       // session
       username: "polly@gmail.com",
       r_content: "",

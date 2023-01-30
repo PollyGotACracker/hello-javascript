@@ -1,9 +1,9 @@
 import Sequelize from "sequelize";
-export default (sequelize) => {
+export default (sequelize, DataTypes) => {
   return sequelize.define(
-    "board_content",
+    "post",
     {
-      b_code: {
+      p_code: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: false,
         primaryKey: true,
@@ -12,71 +12,71 @@ export default (sequelize) => {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: false,
       },
-      b_title: {
+      p_title: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: false,
       },
-      b_content: {
+      p_content: {
         type: Sequelize.DataTypes.TEXT,
         allowNull: true,
       },
-      b_category: {
+      b_code: {
         type: Sequelize.DataTypes.STRING(125),
         allowNull: false,
       },
-      b_date: {
+      p_date: {
         type: Sequelize.DataTypes.STRING(10),
         allowNull: false,
         defaultValue: Sequelize.Sequelize.literal(
           "(date_format(now(),_utf8mb4'%Y-%m-%d'))"
         ),
       },
-      b_time: {
+      p_time: {
         type: Sequelize.DataTypes.STRING(10),
         allowNull: false,
         defaultValue: Sequelize.Sequelize.literal(
           "(date_format(now(),_utf8mb4'%H:%i:%S'))"
         ),
       },
-      b_updated: {
+      p_updated: {
         type: Sequelize.DataTypes.DATE,
         allowNull: false,
         defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      b_deleted: {
+      p_deleted: {
         type: Sequelize.DataTypes.STRING(10),
         allowNull: true,
       },
-      b_views: {
+      p_views: {
         type: Sequelize.DataTypes.BIGINT,
         allowNull: true,
         defaultValue: 0,
       },
-      b_replies: {
+      p_replies: {
         type: Sequelize.DataTypes.BIGINT,
         allowNull: true,
         defaultValue: 0,
       },
-      b_upvote: {
+      p_upvote: {
         type: Sequelize.DataTypes.BIGINT,
         allowNull: true,
         defaultValue: 0,
       },
-      b_group: {
+      b_group_code: {
         type: Sequelize.DataTypes.STRING(125),
         allowNull: true,
       },
     },
     {
       sequelize,
-      tableName: "board_content",
+      tableName: "post",
       timestamps: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "b_code" }],
+          fields: [{ name: "p_code" }],
         },
       ],
     }

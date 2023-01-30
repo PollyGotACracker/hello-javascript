@@ -1,45 +1,44 @@
 import Sequelize from "sequelize";
 export default (sequelize, DataTypes) => {
   return sequelize.define(
-    "attach",
+    "board",
     {
-      a_code: {
+      b_code: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: false,
         primaryKey: true,
       },
-      p_code: {
+      b_eng: {
         type: Sequelize.DataTypes.STRING(256),
-        allowNull: true,
-      },
-      a_date: {
-        type: Sequelize.DataTypes.DATE,
         allowNull: false,
-        defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
-      a_original_name: {
+      b_kor: {
+        type: Sequelize.DataTypes.STRING(256),
+        allowNull: false,
+      },
+      b_group_code: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: true,
       },
-      a_save_name: {
+      b_group_eng: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: true,
       },
-      a_ext: {
-        type: Sequelize.DataTypes.STRING(10),
+      b_group_kor: {
+        type: Sequelize.DataTypes.STRING(256),
         allowNull: true,
       },
     },
     {
       sequelize,
-      tableName: "attach",
+      tableName: "board",
       timestamps: false,
       indexes: [
         {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "a_code" }],
+          fields: [{ name: "b_code" }],
         },
       ],
     }

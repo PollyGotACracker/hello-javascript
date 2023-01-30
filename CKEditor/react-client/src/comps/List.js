@@ -3,14 +3,14 @@ const List = ({ data }) => {
   const ListItem = () => {
     return data.map((item) => {
       return (
-        <li className="list-item" key={item.b_code}>
-          <div className="title">{item.b_title}</div>
-          <div className="date">{`${item.b_date} ${item.b_time}`}</div>
+        <li className="list-item" key={item.p_code}>
+          <div className="title">{item.p_title}</div>
+          <div className="date">{`${item.p_date} ${item.p_time}`}</div>
           <div className="nickname">{item.username}</div>
           <div className="detail-box">
-            <span>{item.b_views}</span>
-            <span>{item.b_replies}</span>
-            <span>{item.b_upvote}</span>
+            <span>{item.p_views}</span>
+            <span>{item.p_replies}</span>
+            <span>{item.p_upvote}</span>
           </div>
         </li>
       );

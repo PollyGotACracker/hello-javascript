@@ -1,9 +1,9 @@
 import Sequelize from "sequelize";
-export default (sequelize) => {
+export default (sequelize, DataTypes) => {
   return sequelize.define(
     "upvote",
     {
-      b_code: {
+      p_code: {
         type: Sequelize.DataTypes.STRING(256),
         allowNull: false,
         primaryKey: true,
@@ -23,7 +23,7 @@ export default (sequelize) => {
           name: "PRIMARY",
           unique: true,
           using: "BTREE",
-          fields: [{ name: "b_code" }, { name: "username" }],
+          fields: [{ name: "p_code" }, { name: "username" }],
         },
       ],
     }
