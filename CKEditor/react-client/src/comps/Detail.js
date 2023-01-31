@@ -16,8 +16,16 @@ import { usePostContext } from "../context/PostContextProvider";
 // 카테고리 데이터 어떻게 해야?? 테이블 생성?
 
 const Detail = () => {
-  const { postData, setPostData, replyData, setReplyData, initReply } =
-    usePostContext();
+  const {
+    postData,
+    setPostData,
+    replyData,
+    setReplyData,
+    initReply,
+    boardData,
+    setBoardData,
+  } = usePostContext();
+
   const [upvote, setUpvote] = useState(null);
   const [replyCount, setReplyCount] = useState(null);
   const [replyList, setReplyList] = useState([]);
@@ -29,7 +37,8 @@ const Detail = () => {
       const postResult = await getDetailPost(pCode);
       const replyResult = await getReply(pCode);
       if (postResult) {
-        setPostData({ ...postResult });
+        setPostData({ ...postResult.postData });
+        setBoardData({ ...postResult.boardData });
         setUpvote(postResult.p_upvote);
         setReplyList([...replyResult.replyList]);
         setReplyCount(replyResult.replyCount.p_replies);
@@ -61,7 +70,7 @@ const Detail = () => {
   return (
     <>
       <main className="commu-detail">
-        <section className="category">카테고리</section>
+        <section className="board">{boardData.b_kor}</section>
 
         <section>
           <div className="title ">{postData.p_title}</div>

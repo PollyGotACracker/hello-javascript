@@ -1,0 +1,11 @@
+b_code,b_eng,b_kor,b_group_code,b_group_eng,b_group_kor,level
+B11,notice,공지,B1,general,일반,
+B12,free,자유게시판,B1,general,일반,
+B21,animals,동물,B2,hobbies,취미,
+B22,plants,식물,B2,hobbies,취미,
+B31,programming,프로그래밍,B3,learning,학습,
+B32,design,디자인,B3,learning,학습,
+B41,health,건강,B4,lifestyle,생활,
+B42,fashion,패션,B4,lifestyle,생활,
+B51,politics,정치,B5,issue,이슈,
+B52,entertainment,연예,B5,issue,이슈,

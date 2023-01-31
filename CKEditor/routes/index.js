@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import { v4 } from "uuid";
 
+const BOARD = DB.models.board;
 const POST = DB.models.post;
 const ATTACH = DB.models.attach;
 const UPVOTE = DB.models.upvote;
@@ -133,10 +134,10 @@ router.get("/board/:bCode/get", async (req, res) => {
 router.get("/post/:pCode/get", async (req, res) => {
   try {
     const pCode = req.params?.pCode;
-    const postData = await POST.findByPk(pCode);
-    const result = await postData.increment("p_views", { by: 1 });
-    console.log(result);
-    return res.status(200).send(result);
+    const result = await POST.findByPk(pCode);
+    const postData = await result.increment("p_views", { by: 1 });
+    const boardData = await BOARD.findByPk(result.toJSON().b_code);
+    return res.status(200).send({ postData, boardData });
   } catch (err) {
     console.error(err);
   }

@@ -14,8 +14,8 @@ export const PostContextProvider = ({ children }) => {
       username: "polly@gmail.com",
       p_title: "",
       p_content: "",
-      b_code: "C21",
-      b_group_code: "C2",
+      b_code: "B21",
+      b_group_code: "B2",
     };
     return postData;
   };
@@ -32,17 +32,29 @@ export const PostContextProvider = ({ children }) => {
     return replyData;
   };
 
+  const [boardList, setBoardList] = useState([]);
   const [postData, setPostData] = useState(initPost);
-
   const [replyData, setReplyData] = useState(initReply);
+  const [boardData, setBoardData] = useState({
+    b_code: "",
+    b_eng: "",
+    b_kor: "",
+    b_group_code: "",
+    b_group_eng: "",
+    b_group_kor: "",
+  });
 
   const props = {
+    boardList,
+    setBoardList,
     initPost,
     postData,
     setPostData,
     initReply,
     replyData,
     setReplyData,
+    boardData,
+    setBoardData,
   };
 
   return <PostContext.Provider value={props}>{children}</PostContext.Provider>;
