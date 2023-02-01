@@ -1,26 +1,21 @@
-// 각 게시판별 페이지
-// .../community/category/catA
-import List from "./List";
-import "../css/community/Category.css";
+import BoardList from "./BoardList";
+import "../css/Board.css";
 import { useState, useLayoutEffect } from "react";
 import { getBoardPosts } from "../service/post.service";
+import { useLoaderData, Link } from "react-router-dom";
 
-const Category = () => {
-  // 임시 카테고리 코드
-  const bCode = "C21";
-  const [boardList, setBoardList] = useState([]);
-  useLayoutEffect(() => {
-    (async () => {
-      const result = await getBoardPosts(bCode);
-      if (result) {
-        setBoardList([...result]);
-      }
-      return null;
-    })();
-  }, []);
+export const loader = async ({ params }) => {
+  const bEng = params.board;
+  const { data, board } = await getBoardPosts(bEng);
+  return { data, board };
+};
+
+const Board = () => {
+  const { data, board } = useLoaderData();
 
   return (
     <main className="commu-cat">
+      <h1>{board.b_kor}</h1>
       <section>
         <button>{"최신순"}</button>
         <div>
@@ -33,11 +28,13 @@ const Category = () => {
           <input />
           <button>검색</button>
         </div>
-        <button>글쓰기</button>
+        {/* 관리자 권한 추가 */}
+        {board.b_eng !== "notice" && <Link to={`/write`}>글쓰기</Link>}
       </section>
-      <List data={boardList} />
+
+      <BoardList data={data} />
     </main>
   );
 };
 
-export default Category;
+export default Board;

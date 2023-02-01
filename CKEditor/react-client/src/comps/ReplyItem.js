@@ -10,9 +10,9 @@ const ReplyItem = ({ data, item }) => {
 
   return (
     <li>
-      <div>{`${item.r_date} ${item.r_time}`}</div>
       <img alt="프로필 이미지" />
       <span>{item.username}</span>
+      <div>{`${item.r_date} ${item.r_time}`}</div>
       <div>{item.r_content || "삭제된 댓글입니다."}</div>
       <div>
         <button>수정</button>

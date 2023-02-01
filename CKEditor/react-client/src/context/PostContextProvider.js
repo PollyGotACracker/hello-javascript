@@ -14,12 +14,11 @@ export const PostContextProvider = ({ children }) => {
       username: "polly@gmail.com",
       p_title: "",
       p_content: "",
-      b_code: "B21",
-      b_group_code: "B2",
+      b_code: "",
+      b_group_code: "",
     };
     return postData;
   };
-
   const initReply = () => {
     const replyData = {
       r_code: v4(),

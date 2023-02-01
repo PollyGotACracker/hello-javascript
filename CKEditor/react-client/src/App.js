@@ -1,15 +1,13 @@
 import "./css/App.css";
-import Main from "./comps/Main.js";
-import Write from "./comps/Write.js";
-import Detail from "./comps/Detail.js";
+import { Outlet } from "react-router-dom";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <header className="App-header"></header>
-      <Write />
+      <Outlet />
     </div>
   );
-}
+};
 
 export default App;

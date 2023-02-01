@@ -1,7 +1,8 @@
+// Main 에 포함
 import { useRef } from "react";
-// 추천수(또는 조회수) 랭킹 : Main 과 Category 에 포함
+import { Link } from "react-router-dom";
 
-const Rank = ({ data }) => {
+const CommRank = ({ data }) => {
   const keyRef = useRef(0);
 
   const RankItem = () => {
@@ -9,23 +10,23 @@ const Rank = ({ data }) => {
       keyRef.current++;
 
       return (
-        <div
-          // to={`/community/${item.b_cat_eng}/${b_code}`}
+        <Link
           className="rank-item"
           key={keyRef.current}
+          to={`/community/${item["board.b_eng"]}/${item.p_code}`}
         >
           {/* <div>
             <img src={`/static/uploads/${item["attachs.thumb"]}`} />
           </div> */}
-          {/* 나중에 nickname으로 수정 */}
-          <div>{item.username}</div>
+          <div>{item.p_title}</div>
           <div>
             <div>{item.p_replies}</div>
             <span>{item.p_upvote}</span>
           </div>
-          <div>{item.p_title}</div>
-          <div>{item.b_code}</div>
-        </div>
+          {/* nickname으로 수정 필요 */}
+          <div>{item.username}</div>
+          <div>{item["board.b_kor"]}</div>
+        </Link>
       );
     });
   };
@@ -37,4 +38,4 @@ const Rank = ({ data }) => {
   );
 };
 
-export default Rank;
+export default CommRank;
