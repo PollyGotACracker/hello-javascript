@@ -109,13 +109,16 @@ const PostDetail = () => {
           </Link>
           <button>삭제</button>
         </section>
-        <div>{`댓글 ${replyCount} 개`}</div>
-        <div className="reply-input-box">
-          <input value={replyData.r_content} onChange={onChangeHandler} />
-          <button onClick={onClickReply}>게시</button>
-        </div>
 
-        <Reply data={replyList} />
+        <section>
+          <div>{`댓글 ${replyCount} 개`}</div>
+          <div className="reply-input-box">
+            <input value={replyData.r_content} onChange={onChangeHandler} />
+            <button onClick={onClickReply}>등록</button>
+          </div>
+
+          <Reply data={replyList} />
+        </section>
       </main>
     </>
   );

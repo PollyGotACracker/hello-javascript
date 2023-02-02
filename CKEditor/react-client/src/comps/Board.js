@@ -29,7 +29,17 @@ const Board = () => {
           <button>검색</button>
         </div>
         {/* 관리자 권한 추가 */}
-        {board.b_eng !== "notice" && <Link to={`/write`}>글쓰기</Link>}
+        {board.b_eng !== "notice" && (
+          <Link
+            to={`/community/write`}
+            state={{
+              b_code: board.b_code,
+              b_group_code: board.b_group_code,
+            }}
+          >
+            글쓰기
+          </Link>
+        )}
       </section>
 
       <BoardList data={data} />
