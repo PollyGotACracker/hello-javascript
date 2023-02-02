@@ -196,7 +196,6 @@ router.get("/post/:pCode/delete", async (req, res, next) => {
   try {
     const date = moment().format("YYYY[-]MM[-]DD HH:mm:ss");
     await POST.update({ p_deleted: date }, { where: { p_code: pCode } });
-    await ATTACH.update({ a_deleted: date }, { where: { p_code: pCode } });
     await REPLY.update({ r_deleted: date }, { where: { p_code: pCode } });
 
     return res.send({ MESSAGE: "게시글이 삭제되었습니다." });
