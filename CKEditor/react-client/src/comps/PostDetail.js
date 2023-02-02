@@ -5,41 +5,43 @@ import { useState, useLayoutEffect } from "react";
 import {
   getDetailPost,
   getReply,
-  insertReply,
   upvotePost,
+  deletePost,
 } from "../service/post.service";
 import { usePostContext } from "../context/PostContextProvider";
-import { useLoaderData, Link } from "react-router-dom";
+import { useLoaderData, useParams, useNavigate, Link } from "react-router-dom";
 
 // html tag -> entity -> tag 로 변환하는 과정 필요
 // 자기 자신을 참조하도록 테이블 관계 설정
 // 댓글을 중첩 구조로 데이터 가공해야 하는지?
 
+// hook 은 컴포넌트 함수 또는 커스텀 hook 에서만 호출할 수 있다.
+// 따라서 일반 함수에서는 hook 을 호출할 수 없다.
 export const loader = async ({ params }) => {
   const pCode = params.post;
-  const { postData, boardData } = await getDetailPost(pCode);
-  const { replyList, replyCount } = await getReply(pCode);
-  return {
-    board: boardData,
-    post: postData,
-    reply: replyList,
-    count: replyCount,
-  };
+  const detail = await getDetailPost(pCode);
+  const reply = await getReply(pCode);
+  return { detail, reply };
 };
 
 const PostDetail = () => {
-  const { board, post, reply, count } = useLoaderData();
-  const { replyData, setReplyData, initReply } = usePostContext();
-  // reRendering data
+  const nav = useNavigate();
+  const bEng = useParams().board;
+  const { detail, reply } = useLoaderData();
+  const { replyCount, setReplyCount } = usePostContext();
   const [upvote, setUpvote] = useState(null);
-  const [replyCount, setReplyCount] = useState(null);
-  const [replyList, setReplyList] = useState([]);
+  let board = detail?.board;
+  let post = detail?.post;
+  let list = reply?.list;
+  let count = reply?.count;
 
   useLayoutEffect(() => {
     (async () => {
-      setUpvote(post.p_upvote);
-      setReplyList([...reply]);
-      setReplyCount(count.p_replies);
+      if (detail.ERROR) {
+        nav(`/community/${bEng}`, { replace: true });
+      }
+      setUpvote(post?.p_upvote);
+      setReplyCount(count);
     })();
   }, []);
 
@@ -52,35 +54,25 @@ const PostDetail = () => {
     if (result) setUpvote(upvote + result[0]);
   };
 
-  // 댓글 입력 데이터 갱신
-  const onChangeHandler = (e) => {
-    setReplyData({
-      ...replyData,
-      p_code: post.p_code,
-      r_content: e.target.value,
-    });
-  };
-
-  // 댓글 등록 버튼 클릭
-  const onClickReply = async () => {
-    const result = await insertReply(replyData);
-    if (result) {
-      setReplyList([...result.replyList]);
-      setReplyCount(result.replyCount.p_replies);
-      setReplyData(initReply);
+  // 삭제 버튼 클릭
+  const onClickDelete = async () => {
+    const result = await deletePost(post.p_code);
+    if (result.MESSAGE) {
+      nav(`/community/${board.b_eng}`, { replace: true });
     }
   };
 
+  // 예외 처리를 하지 않으면 alert 후 navigation 하기 전 오류 발생
   return (
     <>
       <main className="commu-detail">
-        <Link className="board p-2" to={`/community/${board.b_eng}`}>
-          {board.b_kor}
+        <Link className="board p-2" to={`/community/${board?.b_eng}`}>
+          {board?.b_kor}
         </Link>
 
         <section>
-          <div className="title ">{post.p_title}</div>
-          <span>{post.p_views}</span>
+          <div className="title ">{post?.p_title}</div>
+          <span>{post?.p_views}</span>
           <span>{upvote}</span>
           <span>{replyCount}</span>
         </section>
@@ -88,14 +80,14 @@ const PostDetail = () => {
         <section>
           <img alt="프로필 이미지" />
           {/* nickname으로 수정 필요 */}
-          <div className="nickname">{post.username}</div>
-          <span>{`${post.p_date} ${post.p_time}`}</span>
+          <div className="nickname">{post?.username}</div>
+          <span>{`${post?.p_date} ${post?.p_time}`}</span>
         </section>
 
         <section>
           <div
             className="content"
-            dangerouslySetInnerHTML={{ __html: post.p_content }}
+            dangerouslySetInnerHTML={{ __html: post?.p_content }}
           ></div>
           <button onClick={onClickUpvote}>
             <div>{upvote}</div>
@@ -104,21 +96,12 @@ const PostDetail = () => {
         </section>
         {/* 게시글과 세션 username 비교 후 표시 */}
         <section className="button-box">
-          <Link to={`/community/write/${post.p_code}`} state={{ data: post }}>
+          <Link to={`/community/write/${post?.p_code}`} state={{ data: post }}>
             수정
           </Link>
-          <button>삭제</button>
+          <button onClick={onClickDelete}>삭제</button>
         </section>
-
-        <section>
-          <div>{`댓글 ${replyCount} 개`}</div>
-          <div className="reply-input-box">
-            <input value={replyData.r_content} onChange={onChangeHandler} />
-            <button onClick={onClickReply}>등록</button>
-          </div>
-
-          <Reply data={replyList} />
-        </section>
+        <Reply code={post?.p_code} count={replyCount} list={list} />
       </main>
     </>
   );

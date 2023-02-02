@@ -44,7 +44,7 @@ export default (sequelize, DataTypes) => {
         defaultValue: Sequelize.Sequelize.literal("CURRENT_TIMESTAMP"),
       },
       p_deleted: {
-        type: Sequelize.DataTypes.STRING(10),
+        type: Sequelize.DataTypes.STRING(125),
         allowNull: true,
       },
       p_views: {
