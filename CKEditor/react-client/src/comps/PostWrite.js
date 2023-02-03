@@ -3,26 +3,24 @@ import EditorModule from "./EditorModule";
 import { submitPost } from "../service/post.service";
 import { usePostContext } from "../context/PostContextProvider";
 import { useLayoutEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 
 const PostWrite = () => {
-  // data setting: ckEditor setData 또는 initData 사용
-
+  const nav = useNavigate();
   const { initPost, postData, setPostData } = usePostContext();
-  //useLocation().state.aaa 안됨
   const location = useLocation();
+  const { b_code, b_eng, b_group_code } = location?.state;
+  const data = location?.state?.data;
   const pCode = useParams()?.post;
 
   useLayoutEffect(() => {
-    const { b_code, b_group_code } = location?.state;
-    const data = location?.state?.data;
     // setState 를 같은 함수 내에서 여러 번 실행하면
     // 가장 마지막 setState 만 실행된다.
 
     // username 추가 필요
     // insert
-    const init = initPost();
     if (!pCode) {
+      const init = initPost();
       setPostData({ ...init, b_code: b_code, b_group_code: b_group_code });
     }
     // update
@@ -40,8 +38,15 @@ const PostWrite = () => {
     setPostData({ ...postData, p_content: data });
   };
 
-  const onClickHandler = () => {
-    submitPost(postData);
+  const onClickHandler = async () => {
+    let result;
+    // insert
+    if (!pCode) result = await submitPost(postData);
+    // update
+    if (pCode) result = await submitPost(postData, pCode);
+    if (result.MESSAGE) {
+      nav(`/community/${b_eng}`, { replace: true });
+    }
   };
 
   return (

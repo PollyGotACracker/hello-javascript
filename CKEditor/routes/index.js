@@ -181,9 +181,22 @@ router.post("/post/insert", async (req, res) => {
   const data = req.body;
   try {
     await POST.create(data);
-    return res.send({ MESSAGE: "POST INSERT" });
+    return res.send({ MESSAGE: "게시글이 등록되었습니다." });
   } catch (err) {
     console.error(err);
+    return res.send({ ERROR: "게시글을 등록하는 중 문제가 발생했습니다." });
+  }
+});
+
+router.patch("/post/update", async (req, res, next) => {
+  const data = req.body;
+  try {
+    console.log("asdf", data.p_code);
+    await POST.update(data, { where: { p_code: data.p_code } });
+    return res.send({ MESSAGE: "게시글이 수정되었습니다." });
+  } catch (err) {
+    console.error(err);
+    return res.send({ ERROR: "게시글을 수정하는 중 문제가 발생했습니다." });
   }
 });
 

@@ -96,7 +96,10 @@ const PostDetail = () => {
         </section>
         {/* 게시글과 세션 username 비교 후 표시 */}
         <section className="button-box">
-          <Link to={`/community/write/${post?.p_code}`} state={{ data: post }}>
+          <Link
+            to={`/community/write/${post?.p_code}`}
+            state={{ data: post, b_eng: board.b_eng }}
+          >
             수정
           </Link>
           <button onClick={onClickDelete}>삭제</button>

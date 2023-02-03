@@ -1,6 +1,5 @@
 import BoardList from "./BoardList";
 import "../css/Board.css";
-import { useState, useLayoutEffect } from "react";
 import { getBoardPosts } from "../service/post.service";
 import { useLoaderData, Link } from "react-router-dom";
 
@@ -34,6 +33,7 @@ const Board = () => {
             to={`/community/write`}
             state={{
               b_code: board.b_code,
+              b_eng: board.b_eng,
               b_group_code: board.b_group_code,
             }}
           >

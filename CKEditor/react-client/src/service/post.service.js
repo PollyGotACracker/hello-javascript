@@ -35,7 +35,7 @@ export const getDetailPost = async (pCode) => {
   }
 };
 
-export const submitPost = async (data) => {
+export const submitPost = async (data, pCode = null) => {
   // 본문에서 thumbnail 경로를 추출해 별도의 칼럼에 저장하는 방식은 좋지 않다...
   // const content = item?.b_content;
   // let imgSrc = "";
@@ -53,9 +53,23 @@ export const submitPost = async (data) => {
     body: JSON.stringify(data),
   };
   try {
-    const response = await fetch("/post/insert", fetchOption);
+    let response;
+    // insert
+    if (!pCode) {
+      response = await fetch("/post/insert", fetchOption);
+    }
+    // update
+    if (pCode) {
+      fetchOption.method = "PATCH";
+      response = await fetch("/post/update", fetchOption);
+    }
     const result = await response.json();
+    if (result.ERROR) {
+      alert(result.ERROR);
+      return null;
+    }
     alert(result.MESSAGE);
+    return result;
   } catch (err) {
     return null;
   }
@@ -76,6 +90,7 @@ export const deletePost = async (pCode) => {
       return null;
     }
 };
+
 export const upvotePost = async (pCode, username) => {
   try {
     const fetchOption = {
