@@ -1,0 +1,42 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.container {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+  flex-wrap: wrap;
+  padding: 50px;
+  margin: 2%;
+  border-radius: 10px;
+  background-color: cadetblue;
+}
+.container .title {
+  flex: 1;
+  flex-basis: 100%;
+  text-align: center;
+}
+
+button {
+  width: 80px;
+  height: 80px;
+  border: 0;
+  background: transparent;
+  cursor: move;
+  transition: all ease-in-out 0.5s;
+}
+button img {
+  width: 100%;
+}
+button:hover img {
+  transform: scale(1.2);
+}
