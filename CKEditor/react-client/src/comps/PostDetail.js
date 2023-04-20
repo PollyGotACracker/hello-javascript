@@ -12,7 +12,7 @@ import { usePostContext } from "../context/PostContextProvider";
 import { useLoaderData, useParams, useNavigate, Link } from "react-router-dom";
 
 // html tag -> entity -> tag 로 변환하는 과정 필요
-// 자기 자신을 참조하도록 테이블 관계 설정
+// 자기 자신을 참조하도록 테이블 관계 설정?
 // 댓글을 중첩 구조로 데이터 가공해야 하는지?
 
 // hook 은 컴포넌트 함수 또는 커스텀 hook 에서만 호출할 수 있다.

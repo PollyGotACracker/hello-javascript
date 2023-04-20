@@ -42,7 +42,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join("react-client/build")));
-app.use("/static", express.static("public"));
+// 첫 번째 인수 /static 은 미디어 get 할 때 경로
+app.use("/static", express.static(path.join("public")));
 
 // router link enable
 app.use("/", indexRouter);

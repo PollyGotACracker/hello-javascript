@@ -105,7 +105,7 @@ router.get("/board/:bEng/get", async (req, res) => {
     const board = await BOARD.findOne({
       where: { b_eng: bEng },
     });
-
+    console.log(board);
     const data = await POST.findAll({
       attributes: [
         "p_code",

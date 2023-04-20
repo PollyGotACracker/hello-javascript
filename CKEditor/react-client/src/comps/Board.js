@@ -6,6 +6,7 @@ import { useLoaderData, Link } from "react-router-dom";
 export const loader = async ({ params }) => {
   const bEng = params.board;
   const { data, board } = await getBoardPosts(bEng);
+  console.log(data, board);
   return { data, board };
 };
 

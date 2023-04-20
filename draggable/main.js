@@ -1,4 +1,36 @@
+// create bird list
+let birdList = [...new Array(20).keys()];
+birdList = birdList.map((_, idx) => {
+  const btn = document.createElement("BUTTON");
+  btn.className = "bird";
+  btn.setAttribute("type", "button");
+  btn.setAttribute("draggable", "true");
+  // dataset 이 아닌 다른 방법?
+  btn.dataset.isparrot = idx <= 9 ? "true" : "false";
+  const img = document.createElement("IMG");
+  img.src = `./images/bird${String(idx + 1).padStart(2, 0)}.png`;
+  btn.appendChild(img);
+  return btn;
+});
+
+// randomize bird items
+// 틀린 요소를 일정 수 이상 배치하려면?
+let i = 0;
+while (i <= birdList.length * 5) {
+  const _randNum01 = Math.floor(Math.random() * birdList.length);
+  const _randNum02 = Math.floor(Math.random() * birdList.length);
+  [birdList[_randNum02], birdList[_randNum01]] = [
+    birdList[_randNum01],
+    birdList[_randNum02],
+  ];
+  i++;
+}
+
+// set bird items
 const containers = document.querySelectorAll(".container");
+containers[0].append(...birdList.slice(0, 10));
+containers[1].append(...birdList.slice(-10));
+
 const birds = document.querySelectorAll(".bird");
 
 const getAfterDragging = (container, x, y) => {
@@ -17,7 +49,7 @@ const getAfterDragging = (container, x, y) => {
       // 현재 드래그 지점이 bottom 위치보다 위 && top 위치보다 아래
       const inRow = y - box.bottom <= 0 && y - box.top >= 0;
       /**
-       * offset? -infinity?
+       * offset?
        */
       const offset = x - box.left - box.width / 2;
       // column 일 경우:
@@ -50,9 +82,25 @@ const getAfterDragging = (container, x, y) => {
   ).element;
 };
 
+const checkAnswer = () => {
+  const result = Array.from(containers).reduce((acc, container) => {
+    const allBirds = Array.from(container.children);
+    const correct = container.dataset.allowsparrot;
+    const correctItems = allBirds.filter(
+      (item) => item.dataset.isparrot === correct
+    );
+    return { ...acc, [correct]: correctItems.length };
+  }, {});
+  if (result.true === 10 && result.false === 10 && result.true === result.false)
+    alert("Hurray!");
+};
+
 birds.forEach((bird) => {
   bird.addEventListener("dragstart", () => bird.classList.add("dragging"));
-  bird.addEventListener("dragend", () => bird.classList.remove("dragging"));
+  bird.addEventListener("dragend", () => {
+    bird.classList.remove("dragging");
+    checkAnswer();
+  });
 });
 
 containers.forEach((container) => {
