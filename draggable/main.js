@@ -1,19 +1,34 @@
+// let birdArr = [...new Array(20).keys()];
+const parrotArr = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10"];
+const noParrotArr = [
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+];
+const birdArr = parrotArr.concat(noParrotArr);
+const PARROT_NUM = parrotArr.length;
+
 // create bird list
-let birdList = [...new Array(20).keys()];
-birdList = birdList.map((_, idx) => {
+const birdList = birdArr.map((val) => {
   const btn = document.createElement("BUTTON");
   btn.className = "bird";
   btn.setAttribute("type", "button");
   btn.setAttribute("draggable", "true");
-  // dataset 이 아닌 다른 방법?
-  btn.dataset.isparrot = idx <= 9 ? "true" : "false";
+  btn.dataset.num = val;
   const img = document.createElement("IMG");
-  img.src = `./images/bird${String(idx + 1).padStart(2, 0)}.png`;
+  img.src = `./images/bird${val}.png`;
   btn.appendChild(img);
   return btn;
 });
 
-// randomize bird items
+// randomize bird list items
 // 틀린 요소를 일정 수 이상 배치하려면?
 let i = 0;
 while (i <= birdList.length * 5) {
@@ -32,6 +47,8 @@ containers[0].append(...birdList.slice(0, 10));
 containers[1].append(...birdList.slice(-10));
 
 const birds = document.querySelectorAll(".bird");
+
+// https://stackoverflow.com/questions/74335612/drag-and-drop-when-using-flex-wrap
 
 const getAfterDragging = (container, x, y) => {
   // 현재 드래그 중인 요소를 제외한 나머지
@@ -83,18 +100,25 @@ const getAfterDragging = (container, x, y) => {
 };
 
 const checkAnswer = () => {
-  const result = Array.from(containers).reduce((acc, container) => {
-    const allBirds = Array.from(container.children);
-    const correct = container.dataset.allowsparrot;
-    const correctItems = allBirds.filter(
-      (item) => item.dataset.isparrot === correct
-    );
-    return { ...acc, [correct]: correctItems.length };
-  }, {});
-  if (result.true === 10 && result.false === 10 && result.true === result.false)
+  const parrotConItems = Array.from(containers[1].children);
+  let correctItems = 0;
+  parrotConItems.forEach((item) =>
+    parrotArr.forEach((num) => {
+      if (num === item.dataset.num) correctItems++;
+    })
+  );
+  document.getElementById("parrots_num").textContent =
+    parrotArr.length - correctItems;
+  document.getElementById("birds_num").textContent =
+    parrotConItems.length - 1 - correctItems;
+
+  // container 의 children 개수가 늦게 반영되는 문제로 - 1 적용
+  if (parrotConItems.length - 1 === PARROT_NUM && correctItems === PARROT_NUM)
     alert("Hurray!");
 };
+checkAnswer();
 
+// bird item addEventListener
 birds.forEach((bird) => {
   bird.addEventListener("dragstart", () => bird.classList.add("dragging"));
   bird.addEventListener("dragend", () => {
@@ -103,6 +127,7 @@ birds.forEach((bird) => {
   });
 });
 
+// container addEventListener
 containers.forEach((container) => {
   // dragover: 해당 요소 위에서 드래그하는 매 시점마다
   container.addEventListener("dragover", (e) => {
