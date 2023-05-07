@@ -107,12 +107,13 @@ const checkAnswer = () => {
       if (num === item.dataset.num) correctItems++;
     })
   );
+
+  // container 의 children 개수가 늦게 반영되는 문제로 - 1 적용
   document.getElementById("parrots_num").textContent =
     parrotArr.length - correctItems;
   document.getElementById("birds_num").textContent =
     parrotConItems.length - 1 - correctItems;
 
-  // container 의 children 개수가 늦게 반영되는 문제로 - 1 적용
   if (parrotConItems.length - 1 === PARROT_NUM && correctItems === PARROT_NUM)
     alert("Hurray!");
 };

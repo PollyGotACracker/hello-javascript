@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+      }
+      #drop_label {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        border: 1px dotted gray;
+        width: 80vw;
+        min-height: 20vh;
+      }
+      #drop_label.active {
+        background: #eee;
+      }
+      #drop_label div {
+        width: 100%;
+        text-align: center;
+      }
+      #preview {
+        width: 100%;
+        flex: 1;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        padding: 16px;
+        border-radius: 10px;
+        align-items: center;
+      }
+      #preview div img {
+        width: 100%;
+        height: 128px;
+        object-position: center;
+        object-fit: cover;
+        border-radius: 10px;
+      }
+      #preview div img:hover {
+        filter: grayscale(0.8);
+        opacity: 0.6;
+      }
+    </style>
+  </head>
+  <body>
+    <label id="drop_label" for="input_file">
+      <div>Drag and Drop image file Here</div>
+      <div id="preview"></div>
+    </label>
+    <input id="input_file" type="file" accept="image/*" multiple="true" />
+    <!-- hidden="true" -->
+
+    <script>
+      const input = document.querySelector("#input_file");
+      const label = document.querySelector("#drop_label");
+      const preview = document.querySelector("#preview");
+      /**
+       * cf) dragenter-dragleave 이벤트를 설정한 대상에 child 요소가 있을 경우
+       * capturing 이 false 임에도 불구하고
+       * parent 내 각각의 child 요소에서 계속적으로 trigger 되는 문제 발생
+       * 따라서 parent 에 마지막 dragleave 이벤트가 발생하는 시점에만(counter = 0)
+       */
+      let counter = 0;
+      let currentFiles = input?.files;
+
+      const deleteFile = (event) => {
+        event.preventDefault();
+        const deleteId = event.currentTarget.dataset.id;
+        updateFiles({ deleteId });
+      };
+
+      const updateFiles = ({ newFiles, deleteId }) => {
+        const dataTranster = new DataTransfer();
+        const massArr = newFiles
+          ? [...currentFiles, ...newFiles]
+          : [...currentFiles];
+        const removeIds = [];
+
+        const files = massArr.filter((file) => {
+          const isPreserved = file.lastModified !== Number(deleteId);
+          const isUnique = !removeIds.includes(file.lastModified);
+          if (isPreserved && isUnique) {
+            removeIds.push(file.lastModified);
+            return file;
+          }
+        });
+        files.forEach((file) => {
+          dataTranster.items.add(file);
+        });
+
+        document.querySelector("#input_file").files = dataTranster.files;
+        currentFiles = dataTranster.files;
+
+        preview.innerHTML = "";
+
+        [...dataTranster.files].forEach((file) => {
+          const reader = new FileReader();
+          reader.addEventListener("load", (e) => {
+            const frag = document.createDocumentFragment();
+            const img = createNode("img", {
+              className: "embed-img",
+              src: e.target?.result,
+            });
+            const imgContainer = createNode(
+              "div",
+              {
+                className: "container-img",
+                onClick: "deleteFile(event)",
+                "data-id": file.lastModified,
+              },
+              img,
+              file.name
+            );
+            preview.append(imgContainer);
+          });
+          reader.readAsDataURL(file);
+        });
+      };
+
+      const createNode = (tag, attr, ...children) => {
+        // fragment 또는 element 생성
+        const node =
+          tag === "fragment"
+            ? document.createDocumentFragment()
+            : document.createElement(tag);
+
+        // 생성한 node 에 attr 적용
+        Object.entries(attr).forEach(([key, value]) => {
+          if (key === "events") {
+            Object.entries(value).forEach(([type, listener]) => {
+              node.addEventListener(type, listener);
+            });
+          } else if (key in node) {
+            try {
+              node[key] = value;
+            } catch (err) {
+              node.setAttribute(key, value);
+            }
+          } else {
+            node.setAttribute(key, value);
+          }
+        });
+
+        // 배열로 받은 나머지 인자를 각각 childNode로 추가
+        children.forEach((childNode) => {
+          if (typeof childNode === "string") {
+            node.appendChild(document.createTextNode(childNode));
+          } else {
+            node.appendChild(childNode);
+          }
+        });
+
+        return node;
+      };
+
+      input.addEventListener("change", (e) => {
+        const newFiles = [...e.target.files];
+        updateFiles({ newFiles });
+      });
+
+      label.addEventListener("dragenter", (e) => {
+        e.preventDefault();
+        counter++;
+        console.log(`enterCounter ${counter}`);
+        e.currentTarget.classList.add("active");
+      });
+
+      label.addEventListener("dragleave", (e) => {
+        event.preventDefault();
+        counter--;
+        console.log(`leaveCounter ${counter}`);
+        if (counter === 0) {
+          e.currentTarget.classList.remove("active");
+        }
+      });
+
+      // dragover 가 없으면 drop 이 발생하지 않음
+      label.addEventListener("dragover", (e) => {
+        e.preventDefault();
+      });
+
+      label.addEventListener("drop", (e) => {
+        // 파일이 브라우저에서 열리는 동작 방지
+        e.preventDefault();
+        counter = 0;
+        e.currentTarget.classList.remove("active");
+
+        /**
+         * fileList 를 array type 으로...
+         * 1. Array.from(files)
+         * 2. [...files]
+         */
+        const files = e.dataTransfer?.files;
+        const newFiles = [];
+        if (files) {
+          [...files]
+            .filter((file) => file?.type.includes("image"))
+            .forEach((file) => newFiles.push(file));
+          updateFiles({ newFiles });
+        }
+      });
+    </script>
+  </body>
+</html>
