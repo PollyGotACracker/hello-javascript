@@ -1,0 +1,56 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+#drop_label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  border: 1px dotted gray;
+  width: 80vw;
+  min-height: 20vh;
+}
+#drop_label.active {
+  background: #eee;
+}
+#drop_label div {
+  width: 100%;
+  text-align: center;
+}
+#preview {
+  flex: 1;
+  display: grid;
+  /* 
+    container 가 설정값 이상으로 비어있을 경우...
+    auto-fit: container 크기에 맞도록 요소 크기를 확대
+    auto-fill: 요소 크기를 설정값 그대로 유지
+   */
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  border-radius: 10px;
+  align-items: center;
+}
+#preview div {
+  /*
+    cf) ellipsis 설정을 위한 조건: 
+    1. 요소의 width 설정
+    2. overflow:hidden
+    3. white-space: nowrap;
+  */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+#preview div img {
+  width: 100%;
+  height: 128px;
+  object-position: center;
+  object-fit: cover;
+  border-radius: 10px;
+}
+#preview div img:hover {
+  filter: grayscale(0.8);
+  opacity: 0.6;
+}
