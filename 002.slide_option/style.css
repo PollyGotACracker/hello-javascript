@@ -12,91 +12,50 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-}
-/* header */
-header {
-  width: 100%;
-  height: 10%;
-  display: flex;
-  flex-direction: row;
-}
-header div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-header .btn_menu:before {
-  content: "\e5d2";
-  font-family: "Material Icons";
-  font-weight: 400;
-  font-size: 40px;
-}
-header .btn_login:before {
-  content: "\ea77";
-  font-family: "Material Icons";
-  font-weight: 400;
-  font-size: 40px;
-}
-header div:nth-of-type(2) {
-  flex: 1;
+  overflow: hidden;
 }
 
-/* 전체 section 스타일 */
+/* 전체 section */
 section {
   border: 1px solid blue;
-  width: 100%;
   display: flex;
 }
 
-/* search box */
-section.search_box {
-  height: 10%;
-  justify-content: center;
-}
-section.search_box form {
-  width: 80%;
-  height: 100%;
-  display: flex;
+/* reg btn box */
+section#reg_btn_box {
+  height: 20%;
   justify-content: center;
   align-items: center;
 }
-section.search_box form #search {
-  width: 50%;
-  padding: 0.5em;
-}
-section.search_box form #search:before {
-  content: "\e8b6";
-  font-family: "Material Icons";
-  font-weight: 400;
-  font-size: 40px;
+section#reg_btn_box button {
+  width: 30%;
+  height: 30%;
+  margin: 0 0.5em;
 }
 
-/* reg box */
-section.reg_box {
-  flex: 1;
+/* reg form box */
+section#reg_form_box {
+  flex-direction: row;
+  width: 200vw;
+  height: 80%;
+  transition: all 1s;
+}
+/* active class 로 slide 구현... */
+section#reg_form_box.active {
+  transform: translateX(-100vw);
+}
+
+/* form style */
+form.reg {
+  width: 50%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-around;
 }
-section.reg_box > div {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-section.reg_box > div > div {
-  width: 8em;
-  height: 8em;
+form.reg.indi {
   background-color: blue;
-  border-radius: 50%;
 }
-/* section.reg_box div:nth-child(3n) {
-  page-break-after: always;
-  break-after: always;
-  wrap-after: flex;
-  background: silver;
-} */
-
-/* adbox */
-section.ad_box {
-  height: 25%;
+form.reg.busi {
+  background-color: red;
 }

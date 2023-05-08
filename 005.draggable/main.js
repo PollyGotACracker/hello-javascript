@@ -48,8 +48,6 @@ containers[1].append(...birdList.slice(-10));
 
 const birds = document.querySelectorAll(".bird");
 
-// https://stackoverflow.com/questions/74335612/drag-and-drop-when-using-flex-wrap
-
 const getAfterDragging = (container, x, y) => {
   // 현재 드래그 중인 요소를 제외한 나머지
   const notDraggings = [...container.querySelectorAll(".bird:not(.dragging)")];
