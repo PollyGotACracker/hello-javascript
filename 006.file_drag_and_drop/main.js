@@ -1,5 +1,5 @@
-const input = document.querySelector("#input_file");
-const label = document.querySelector("#drop_label");
+const input = document.querySelector("#inputFile");
+const label = document.querySelector("#dropLabel");
 const preview = document.querySelector("#preview");
 /**
  * cf) dragenter-dragleave 이벤트를 설정한 대상에 child 요소가 있을 경우
