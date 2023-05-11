@@ -10,7 +10,7 @@
         margin: 0;
         padding: 0;
       }
-      #sliderContainer {
+      #slider-container {
         width: 50vw;
         overflow: hidden;
         position: relative;
@@ -31,7 +31,6 @@
         transform: translateY(-50%);
         color: #eee;
         background-color: rgba(0, 0, 0, 0.5);
-
         border: 0;
         border-radius: 50%;
         width: 3em;
@@ -56,53 +55,87 @@
         outline: 0;
         transform: translateY(-50%) scale(0.9);
       }
+      #pointer-container {
+        width: 100%;
+        height: 15px;
+        display: flex;
+      }
+      .pointer {
+        height: 100%;
+        background-color: #aaa;
+        transition: background-color 0.2s ease-in-out;
+      }
+      .pointer:hover {
+        background-color: blue;
+      }
+      .pointer.active {
+        background-color: red;
+      }
     </style>
     <title>Document</title>
   </head>
 
   <body>
-    <div id="sliderContainer">
+    <div id="slider-container">
       <div id="slider">
-        <img src="./images//image_8.jpg" alt="image8" class="first_img" />
-        <img src="./images//image_1.jpg" alt="image1" />
-        <img src="./images//image_2.jpg" alt="image2" />
-        <img src="./images//image_3.jpg" alt="image3" />
-        <img src="./images//image_4.jpg" alt="image4" />
-        <img src="./images//image_5.jpg" alt="image5" />
-        <img src="./images//image_6.jpg" alt="image6" />
-        <img src="./images//image_7.jpg" alt="image7" />
-        <img src="./images//image_8.jpg" alt="image8" />
-        <img src="./images//image_1.jpg" alt="image1" class="last_img" />
+        <img src="./images/image_8.jpg" alt="image8" class="first_img" />
+        <img src="./images/image_1.jpg" alt="image1" />
+        <img src="./images/image_2.jpg" alt="image2" />
+        <img src="./images/image_3.jpg" alt="image3" />
+        <img src="./images/image_4.jpg" alt="image4" />
+        <img src="./images/image_5.jpg" alt="image5" />
+        <img src="./images/image_6.jpg" alt="image6" />
+        <img src="./images/image_7.jpg" alt="image7" />
+        <img src="./images/image_8.jpg" alt="image8" />
+        <img src="./images/image_1.jpg" alt="image1" class="last_img" />
       </div>
       <button type="button" class="prev">&lang;</button>
       <button type="button" class="next">&rang;</button>
+      <div id="pointer-container"></div>
     </div>
     <script>
       // https://www.youtube.com/watch?v=IEbaqI7F8vM
       const images = document.querySelectorAll("#slider > img");
-      const sliderContainer = document.querySelector("#sliderContainer");
+      const sliderContainer = document.querySelector("#slider-container");
+      const pointerContainer = document.querySelector("#pointer-container");
       const slider = document.querySelector("#slider");
       const prevBtn = document.querySelector(".prev");
       const nextBtn = document.querySelector(".next");
+
+      // 앞 뒤 이미지를 어떻게 해야 할까??
+      [...images].forEach(() => {
+        const pointer = document.createElement("DIV");
+        pointer.className = "pointer";
+        pointer.style.width = `${100 / images.length}%`;
+        pointerContainer.append(pointer);
+      });
 
       let current = 1;
       // sliderContainer의 가로 길이
       const imgSize = sliderContainer.getBoundingClientRect().width;
       slider.style.transform = `translateX(${-imgSize}px)`;
 
-      prevBtn.addEventListener("click", () => {
+      const prevImg = () => {
         if (current <= 0) return false;
         slider.style.transition = `transform 0.2s ease-in-out`;
         current--;
         slider.style.transform = `translateX(${-imgSize * current}px)`;
-      });
+      };
 
-      nextBtn.addEventListener("click", () => {
+      const nextImg = () => {
         if (current >= images.length - 1) return false;
         slider.style.transition = `transform 0.2s ease-in-out`;
         current++;
         slider.style.transform = `translateX(${-imgSize * current}px)`;
+      };
+
+      slider.addEventListener("transitionstart", () => {
+        [...pointerContainer.children].forEach((pointer) => {
+          pointer.classList.remove("active");
+        });
+        pointerContainer.children[current].classList.add("active");
       });
+
       // cf) transitionend: css 의 transition 이 끝났을 때 발생
       slider.addEventListener("transitionend", () => {
         if (images[current].classList.contains("first_img")) {
@@ -115,6 +148,28 @@
           current = images.length - current;
           slider.style.transform = `translateX(${-imgSize * current}px)`;
         }
+      });
+
+      /*
+        mouseover, mouseout : bubbling O, preventDefault O
+        mouseenter, mouseleave : bubbling X, preventDefault X, target === currentTarget
+      */
+      let startSlide = setInterval(nextImg, 2000);
+      sliderContainer.addEventListener("mouseenter", () => {
+        clearInterval(startSlide);
+      });
+      sliderContainer.addEventListener("mouseleave", () => {
+        startSlide = setInterval(nextImg, 2000);
+      });
+
+      prevBtn.addEventListener("click", prevImg);
+      nextBtn.addEventListener("click", nextImg);
+      [...pointerContainer.childNodes].forEach((pointer, idx) => {
+        pointer.addEventListener("click", () => {
+          current = idx - 1;
+          slider.style.transition = "none";
+          nextImg();
+        });
       });
     </script>
   </body>
