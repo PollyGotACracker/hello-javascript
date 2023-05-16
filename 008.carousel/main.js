@@ -1,6 +1,3 @@
-// https://www.youtube.com/watch?v=IEbaqI7F8vM
-// 처음, 마지막 이미지를 별도로 추가해야 transition 이 자연스러움
-
 const images = document.querySelectorAll("#slider > img");
 const sliderContainer = document.querySelector("#slider-container");
 const pointerContainer = document.querySelector("#pointer-container");
@@ -22,6 +19,9 @@ let imgSize = sliderContainer.getBoundingClientRect().width;
 let current = 1;
 slider.style.transform = `translateX(${-imgSize}px)`;
 let intervalSlide;
+// mobile touch 이벤트로 반환되는 X좌표 저장
+let touchStartX = 0;
+let touchEndX = 0;
 
 const prevImg = () => {
   if (current <= 0) return false;
@@ -71,8 +71,9 @@ const chkImg = () => {
 };
 
 const chkScreen = () => {
-  if (document.hidden) stopSlide();
-  else startSlide();
+  const viewState = document.visibilityState;
+  if (viewState === "hidden") stopSlide();
+  if (viewState === "visible") startSlide();
 };
 
 const resizeImg = () => {
@@ -91,9 +92,58 @@ const clickPointer = (idx) => {
   changePointer();
 };
 
+const chkMobile = () => {
+  const mobileKeyWords = [
+    "Android",
+    "iPhone",
+    "iPod",
+    "BlackBerry",
+    "Windows CE",
+    "SAMSUNG",
+    "LG",
+    "MOT",
+    "SonyEricsson",
+  ];
+  for (let info in mobileKeyWords) {
+    if (navigator.userAgent.match(info) != null) return true;
+  }
+  return false;
+};
+
+const touchSlider = (e) => {
+  e.preventDefault();
+  let touch;
+  // TouchEvent.changedTouches: 이벤트 타입에 따른 터치포인트의 정보 (read-only)
+  switch (e.type) {
+    case "touchstart":
+      stopSlide();
+      touch = e.changedTouches[0];
+      touchStartX = touch.clientX;
+      touchEndX = 0;
+      break;
+
+    case "touchend":
+      touch = e.changedTouches[0];
+      touchEndX = touch.clientX;
+      // 터치동작이 길어지면(스와이프, chkNum의 절대값이 100 이상) swipe 실행
+      // chkNum 이 음수일 때 next(->), 양수일 때 prev(<-)
+      const chkNum = touchStartX - touchEndX;
+      const chkNumAbs = Math.abs(chkNum);
+      if (chkNumAbs > 100) {
+        if (chkNum < 0) nextImg();
+        else prevImg();
+      }
+      startSlide();
+      break;
+  }
+};
+
 startSlide();
 changePointer();
-
+if (chkMobile()) {
+  sliderContainer.addEventListener("touchstart", touchSlider);
+  sliderContainer.addEventListener("touchend", touchSlider);
+}
 slider.addEventListener("transitionstart", changePointer);
 slider.addEventListener("transitionend", chkImg);
 sliderContainer.addEventListener("mouseenter", stopSlide);
@@ -107,18 +157,3 @@ nextBtn.addEventListener("click", nextImg);
     clickPointer(idx);
   });
 });
-
-/*
-  cf)
-  transitionstart, transitionend :
-      css transition 시작 및 종료
-  mouseover, mouseout : 
-      bubbling O, preventDefault O
-  mouseenter, mouseleave : 
-      bubbling X, preventDefault X, target === currentTarget
-  visibilitychange :
-      현재 화면의 표시 여부(탭 전환, 창 최소화 등) 
-      interval 오류와 리소스 낭비 방지
-  resize : 
-      반응형 구현
-*/

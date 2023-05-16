@@ -1,5 +1,5 @@
-const input = document.querySelector("#inputFile");
-const label = document.querySelector("#dropLabel");
+const input = document.querySelector("#input_file");
+const label = document.querySelector("#drop_label");
 const preview = document.querySelector("#preview");
 /**
  * cf) dragenter-dragleave 이벤트를 설정한 대상에 child 요소가 있을 경우
@@ -87,7 +87,6 @@ const updateFiles = ({ newFiles, isDeleted }) => {
   [...newFiles].forEach((file) => {
     const reader = new FileReader();
     reader.addEventListener("load", (e) => {
-      const frag = document.createDocumentFragment();
       const img = createNode("img", {
         className: "embed-img",
         src: e.target?.result,
