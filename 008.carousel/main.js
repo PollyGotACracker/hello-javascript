@@ -10,7 +10,6 @@ const nextBtn = document.querySelector(".next");
   if (idx === 0 || idx === images.length - 1) return false;
   const pointer = document.createElement("DIV");
   pointer.className = "pointer";
-  pointer.dataset.num = idx - 1;
   pointerContainer.append(pointer);
 });
 const pointers = document.querySelectorAll(".pointer");

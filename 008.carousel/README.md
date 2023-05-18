@@ -12,14 +12,19 @@
 
 ## 공부
 
-- 처음, 마지막 이미지를 별도로 추가해야 슬라이드 애니메이션이 자연스러움
+- 처음, 마지막 이미지를 별도로 추가해야 슬라이드 애니메이션이 자연스러움  
+  (element.firstElementChild, element.lastElementChild 를 사용한 방식은 마음에 들지 않았음)
+- 버튼을 눌렀을 때 슬라이드 delay 시간을 초기화해 이미지가 갑자기 넘어가지 않도록 해야 함
+- play 가 중복 실행되어 의도치 않은 방식으로 동작하지 않아야 함
+- pause 와 play 는 오직 toggle 버튼(controller)으로만 동작해야 함  
+  pause 상태일 때 그 외 버튼을 클릭한 경우 play 가 되지 않아야 함
 
 ### touch 및 wheel 관련 eventListener 의 passive option
 
 - 브라우저는 eventListener 가 스크롤을 방지하는지 여부를 알 수 없기 때문에  
   listener 실행이 끝날 때까지 페이지 스크롤을 지연함(rendering 차단)
 - `{ passive: true }` 로 eventListener 가 스크롤을 방지하지 않는다는 것을 명시함으로써  
-  스크롤 지연을 해결하고 퍼포먼스가 향상됨. 단, e.preventDefault 사용 불가능
+  스크롤 지연을 해결하고 퍼포먼스가 향상됨. 단, e.preventDefault 사용 불가
 
 ### transitionstart, transitionend
 
@@ -27,7 +32,7 @@
 
 ### mouseover, mouseout
 
-- bubbling O, preventDefault
+- bubbling O, preventDefault O
 
 ### mouseenter, mouseleave
 

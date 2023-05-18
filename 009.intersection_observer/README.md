@@ -111,6 +111,8 @@ let options = {
 
 - IntersectionObserverEntry 객체의 배열을 반환
 
+## 적용
+
 ### [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading)
 
 ### Infinite Scroll
