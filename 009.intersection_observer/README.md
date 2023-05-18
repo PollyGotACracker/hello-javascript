@@ -27,6 +27,7 @@ observer.observe(targetB);
 - root 요소에서 관찰 대상의 상대적 위치에 대한 사각형 정보인 DOMRectReadOnly 객체 반환
 - `Element.getBoundingClientRect()` 의 반환값과 동일하나,  
   Intersection Observer 는 비동기적으로 실행되므로 reflow 현상을 방지할 수 있음
+  - Renderer Process : JavaScript -> Style -> Layout -> Paint -> Composite
   - reflow : 문서 내 DOM요소의 크기나 위치 등 레이아웃이 변하면
     이를 계산(layout)하여 문서의 일부 또는 전체를 다시 rendering 하는 작업(frame drop 발생)
   - repaint : 단순히 요소의 색상이 변경되거나, reflow 로 인해 render tree 가 변경된 경우  

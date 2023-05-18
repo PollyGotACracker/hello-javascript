@@ -28,7 +28,7 @@ body {
   aspect-ratio: 1920 / 1280;
   object-fit: cover;
 }
-button {
+.paging {
   opacity: 0;
   pointer-events: none;
   position: absolute;
@@ -46,11 +46,11 @@ button {
   align-items: center;
   transition: all 0.2s ease-in-out;
 }
-button:hover {
+.paging:hover {
   background-color: rgba(0, 0, 0, 0.2);
   cursor: pointer;
 }
-button:active {
+.paging:active {
   outline: 0;
   transform: translateY(-50%) scale(0.9);
 }
@@ -63,23 +63,48 @@ button:active {
 #pointer-container {
   position: absolute;
   bottom: 3%;
-  left: 30%;
+}
+#pointer-container {
+  left: calc((100% - 40%) / 2);
   width: 40%;
-  height: 5px;
+  height: 8px;
   display: flex;
-  gap: 2%;
+  justify-content: center;
+  gap: 5px;
+}
+#controller {
+  /* pseudo element content 위치 조정 */
+  margin-bottom: 5px;
+  font-size: larger;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: transparent;
+  border: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#controller.playing:after {
+  content: "\23F5";
+}
+#controller.paused:after {
+  content: "\23F8";
 }
 .pointer {
-  width: 100%;
+  width: 8px;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: rgba(255, 255, 255, 0.8);
-  transition: background-color 0.2s ease-in-out;
+  flex-shrink: 1;
+  transition: width 0.5s ease-in-out, background-color 0.2s ease-in-out;
+}
+#controller:hover,
+.pointer:hover {
+  cursor: pointer;
 }
 .pointer:hover {
   background-color: blue;
-  cursor: pointer;
 }
 .pointer.active {
   background-color: red;
+  width: 10%;
 }
