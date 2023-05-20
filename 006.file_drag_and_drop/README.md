@@ -17,10 +17,11 @@
 - 파일을 drop 할 경우 기본 동작으로 파일이 브라우저에서 열리므로 e.preventDefault() 필요
 - dragenter-dragleave 이벤트를 설정한 대상에 child 요소가 있을 경우  
   capturing 이 false 임에도 불구하고, parent 내 각각의 child 요소에서 계속적으로 trigger 되는 문제 발생  
-  따라서 parent 에 마지막 dragleave 이벤트가 발생하는 시점에만 원하는 동작이 수행되도록 할 것(counter = 0)  
+  따라서 전역 변수 `let counter = 0;` 를 선언하고 enter 시 `counter++`, leave 시 `counter--`
+  parent 에 마지막 dragleave 이벤트가 발생하는 시점(counter === 0)에만 원하는 동작이 수행되도록 할 것
   참고: [https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element](https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element)
 
-### [dataTransfer 객체](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
+### [DataTransfer 객체](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
 
 - drag and drop 작업 중 끌고 있는 데이터에 대한 정보를 저장하는 객체
 

@@ -6,16 +6,20 @@
 - 사용자에게 요소 표시 여부에 따른 작업 또는 애니메이션 수행
 
 ```js
-let targetA = document.querySelector("#itemA");
-let targetB = document.querySelector("#itemB");
+let target = document.querySelector("#item");
+
+let options = {
+  root: document.querySelector("#scrollArea"),
+  rootMargin: "0px",
+  threshold: 1.0,
+};
 
 let observer = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => console.log(entry));
   console.log(observer);
 }, options);
 
-observer.observe(targetA);
-observer.observe(targetB);
+observer.observe(target);
 ```
 
 ## Entries
@@ -65,14 +69,6 @@ observer.observe(targetB);
 ## Options
 
 - Instance properties
-
-```js
-let options = {
-  root: document.querySelector("#scrollArea"),
-  rootMargin: "0px",
-  threshold: 1.0,
-};
-```
 
 ### root
 

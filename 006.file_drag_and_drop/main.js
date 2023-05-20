@@ -1,12 +1,7 @@
 const input = document.querySelector("#input_file");
 const label = document.querySelector("#drop_label");
 const preview = document.querySelector("#preview");
-/**
- * cf) dragenter-dragleave 이벤트를 설정한 대상에 child 요소가 있을 경우
- * capturing 이 false 임에도 불구하고
- * parent 내 각각의 child 요소에서 계속적으로 trigger 되는 문제 발생
- * 따라서 parent 에 마지막 dragleave 이벤트가 발생하는 시점에만(counter = 0)
- */
+
 let counter = 0;
 let currentFiles = input?.files;
 
@@ -115,7 +110,7 @@ const enterDrag = (e) => {
 };
 
 const leaveDrag = (e) => {
-  event.preventDefault();
+  e.preventDefault();
   counter--;
   console.log(`leaveCounter ${counter}`);
   if (counter === 0) {
