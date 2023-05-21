@@ -139,7 +139,9 @@ const chkMobile = () => {
 const touchSlider = (e) => {
   // pointer 나 controller 를 터치했을 경우 click eventListener 동작 실행
   const isNotSwipe =
-    e.target.className === "pointer" || e.target.id === "controller";
+    e.target.className === "paging" ||
+    e.target.className === "pointer" ||
+    e.target.id === "controller";
   if (isNotSwipe) return false;
 
   e.preventDefault();

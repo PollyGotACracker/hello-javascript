@@ -13,10 +13,7 @@ body {
   overflow: hidden;
   position: relative;
 }
-#slider-container:hover button {
-  opacity: 1;
-  pointer-events: auto;
-}
+
 #slider {
   display: flex;
   height: 100%;
@@ -101,6 +98,10 @@ body {
   cursor: pointer;
 }
 @media (hover: hover) and (pointer: fine) {
+  #slider-container:hover .paging {
+    opacity: 1;
+    pointer-events: auto;
+  }
   .pointer:hover {
     background-color: blue;
   }

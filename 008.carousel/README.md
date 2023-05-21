@@ -28,13 +28,13 @@
 
 - touch 시 기본 scroll 동작 방지 : `touch-action: none;`
 - touch 시 css hover 적용 방지 :
-
-```css
-@media (hover: hover) and (pointer: fine) {
-  .element:hover {
+  ```css
+  @media (hover: hover) and (pointer: fine) {
+    .element:hover {
+    }
   }
-}
-```
+  ```
+  `pointer: fine` : 마우스, 터치패드, 드로잉 스타일러스 등 포인팅 장치를 이용한 입력
 
 ### touch 및 wheel 관련 eventListener 의 passive option
 
@@ -65,3 +65,7 @@
 
 - document 의 view 크기가 변경되었을 때(window 객체에 적용)
 - 반응형 구현 시 사용
+
+```
+
+```
