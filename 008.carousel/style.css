@@ -63,14 +63,13 @@ body {
 #pointer-container {
   position: absolute;
   bottom: 3%;
-}
-#pointer-container {
   left: calc((100% - 40%) / 2);
   width: 40%;
   height: 8px;
   display: flex;
   justify-content: center;
   gap: 5px;
+  touch-action: none;
 }
 #controller {
   /* pseudo element content 위치 조정 */
@@ -101,8 +100,10 @@ body {
 .pointer:hover {
   cursor: pointer;
 }
-.pointer:hover {
-  background-color: blue;
+@media (hover: hover) and (pointer: fine) {
+  .pointer:hover {
+    background-color: blue;
+  }
 }
 .pointer.active {
   background-color: red;

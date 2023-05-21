@@ -10,19 +10,23 @@ const nextBtn = document.querySelector(".next");
   if (idx === 0 || idx === images.length - 1) return false;
   const pointer = document.createElement("DIV");
   pointer.className = "pointer";
+  pointer.dataset.num = idx;
   pointerContainer.append(pointer);
 });
 const pointers = document.querySelectorAll(".pointer");
 
-// sliderContainer의 가로 길이
-let imgSize = sliderContainer.getBoundingClientRect().width;
-slider.style.transform = `translateX(${-imgSize}px)`;
+const IMAGE_COUNT = images.length - 2;
 let isPlaying = true;
+// 처음 이미지의 current 는 1 또는 -1
+// 마지막 이미지의 current 는 0 또는 IMAGE_COUNT - 1
 let current = 1;
 let intervalSlide;
 // mobile touch 이벤트로 반환되는 X좌표 저장
 let touchStartX = 0;
 let touchEndX = 0;
+// sliderContainer의 가로 길이
+let imgSize = sliderContainer.getBoundingClientRect().width;
+slider.style.transform = `translateX(${-imgSize}px)`;
 
 const prevImg = () => {
   if (current <= 0) return false;
@@ -55,14 +59,16 @@ const changeState = () => {
 };
 
 const changePointer = () => {
-  let num = current - 1;
-  // - (별도로 추가한 이미지 2장 + index 고려 1 )
-  if (current === 0) num = images.length - 3;
-  if (current === images.length - 1) num = 0;
+  let idx = current - 1;
+  // 마지막 이미지
+  if (current === 0) idx = IMAGE_COUNT - 1;
+  // 첫번째 이미지
+  if (current === IMAGE_COUNT + 1) idx = 0;
+
   [...pointers].forEach((pointer) => {
     pointer.classList.remove("active");
   });
-  pointers[num].classList.add("active");
+  pointers[idx].classList.add("active");
 };
 
 const chkImg = () => {
@@ -101,10 +107,10 @@ const resizeImg = () => {
   }
 };
 
-const clickPointer = (idx) => {
-  current = idx + 1;
-  slider.style.transform = `translateX(${-imgSize * current}px)`;
+const clickPointer = (e) => {
+  current = Number(e.currentTarget.dataset.num);
   slider.style.transition = "none";
+  slider.style.transform = `translateX(${-imgSize * current}px)`;
   changePointer();
   if (isPlaying) {
     pauseSlide();
@@ -131,12 +137,16 @@ const chkMobile = () => {
 };
 
 const touchSlider = (e) => {
+  // pointer 나 controller 를 터치했을 경우 click eventListener 동작 실행
+  const isNotSwipe =
+    e.target.className === "pointer" || e.target.id === "controller";
+  if (isNotSwipe) return false;
+
   e.preventDefault();
   let touch;
   // TouchEvent.changedTouches: 이벤트 타입에 따른 터치포인트의 정보 (read-only)
   switch (e.type) {
     case "touchstart":
-      pauseSlide();
       touch = e.changedTouches[0];
       touchStartX = touch.clientX;
       touchEndX = 0;
@@ -152,8 +162,13 @@ const touchSlider = (e) => {
       if (chkNumAbs > 100) {
         if (chkNum < 0) nextImg();
         else prevImg();
+        if (isPlaying) {
+          pauseSlide();
+          playSlide();
+        }
+      } else {
+        return false;
       }
-      playSlide();
       break;
   }
 };
@@ -186,10 +201,8 @@ nextBtn.addEventListener("click", () => {
   }
 });
 controller.addEventListener("click", changeState);
-[...pointers].forEach((pointer, idx) => {
-  pointer.addEventListener("click", () => {
-    clickPointer(idx);
-  });
+[...pointers].forEach((pointer) => {
+  pointer.addEventListener("click", clickPointer);
 });
 
 // sliderContainer.addEventListener("mouseenter", pauseSlide);
