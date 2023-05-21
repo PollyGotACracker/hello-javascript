@@ -8,12 +8,11 @@ body {
   flex-direction: column;
   align-items: center;
 }
-#slider-container {
+#sliderContainer {
   width: 80vw;
   overflow: hidden;
   position: relative;
 }
-
 #slider {
   display: flex;
   height: 100%;
@@ -57,15 +56,15 @@ body {
 .next {
   right: 5%;
 }
-#pointer-container {
+#pointerContainer {
   position: absolute;
   bottom: 3%;
-  left: calc((100% - 40%) / 2);
-  width: 40%;
+  left: calc((100% - 60%) / 2);
+  width: 60%;
   height: 8px;
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   touch-action: none;
 }
 #controller {
@@ -97,16 +96,16 @@ body {
 .pointer:hover {
   cursor: pointer;
 }
+.pointer.active {
+  background-color: red;
+  width: 30px;
+}
 @media (hover: hover) and (pointer: fine) {
-  #slider-container:hover .paging {
+  #sliderContainer:hover .paging {
     opacity: 1;
     pointer-events: auto;
   }
   .pointer:hover {
     background-color: blue;
   }
-}
-.pointer.active {
-  background-color: red;
-  width: 10%;
 }

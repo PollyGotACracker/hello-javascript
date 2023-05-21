@@ -24,7 +24,7 @@
 - 처음, 마지막 이미지를 별도로 추가해야 슬라이드 애니메이션이 자연스러움  
   (element.firstElementChild, element.lastElementChild 를 사용한 방식은 마음에 들지 않았음)
 
-### touch 발생 시 sideEffect 방지
+### touch 발생 시 CSS 를 이용한 sideEffect 방지
 
 - touch 시 기본 scroll 동작 방지 : `touch-action: none;`
 - touch 시 css hover 적용 방지 :
@@ -34,13 +34,15 @@
     }
   }
   ```
-  `pointer: fine` : 마우스, 터치패드, 드로잉 스타일러스 등 포인팅 장치를 이용한 입력
+  - @media query 의 [hover](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/hover) 와 [pointer](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/pointer)
+  - `hover: hover`: 마우스 등 element 위로 쉽게 hover 할 수 있는 입력 장치
+  - `pointer: fine` : 마우스, 터치패드, 드로잉 스타일러스 등 정확도 높은 포인팅 장치를 이용한 입력
 
 ### touch 및 wheel 관련 eventListener 의 passive option
 
 - 브라우저는 eventListener 가 스크롤을 방지하는지 여부를 알 수 없기 때문에
   listener 실행이 끝날 때까지 페이지 스크롤을 지연함(rendering 차단)
-- `{ passive: true }` 로 eventListener 가 스크롤을 방지하지 않는다는 것을 명시함으로써
+- `{ passive: true }` 옵션으로 eventListener 가 스크롤을 방지하지 않는다는 것을 명시함으로써
   스크롤 지연을 해결하고 퍼포먼스가 향상됨. 단, e.preventDefault 사용 불가
 
 ### transitionstart, transitionend
@@ -65,7 +67,3 @@
 
 - document 의 view 크기가 변경되었을 때(window 객체에 적용)
 - 반응형 구현 시 사용
-
-```
-
-```

@@ -1,6 +1,6 @@
 const images = document.querySelectorAll("#slider > img");
-const sliderContainer = document.querySelector("#slider-container");
-const pointerContainer = document.querySelector("#pointer-container");
+const sliderContainer = document.querySelector("#sliderContainer");
+const pointerContainer = document.querySelector("#pointerContainer");
 const controller = document.querySelector("#controller");
 const slider = document.querySelector("#slider");
 const prevBtn = document.querySelector(".prev");

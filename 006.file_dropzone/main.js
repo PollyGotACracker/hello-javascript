@@ -1,5 +1,5 @@
-const input = document.querySelector("#input_file");
-const label = document.querySelector("#drop_label");
+const input = document.querySelector("#inputFile");
+const label = document.querySelector("#labelDrop");
 const preview = document.querySelector("#preview");
 
 let counter = 0;

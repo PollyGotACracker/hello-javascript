@@ -1,4 +1,4 @@
-# File Drag and Drop
+# File Dropzone
 
 - 2023.05
 - 참고: [https://codepen.io/YWTechIT/pen/VwMxWYm](https://codepen.io/YWTechIT/pen/VwMxWYm)

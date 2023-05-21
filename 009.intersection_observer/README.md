@@ -109,6 +109,6 @@ observer.observe(target);
 
 ## 적용
 
-### [Lazy Loading](https://developer.mozilla.org/en-US/docs/Web/Performance/Lazy_loading)
+### [Lazy Loading](https://web.dev/fast/#lazy-load-images-and-video)
 
 ### Infinite Scroll

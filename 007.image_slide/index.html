@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,8 +12,10 @@
       }
       #slideShow {
         clear: both;
-        width: 100%;
-        height: 300px;
+        max-width: 100vw;
+        max-height: 100vh;
+        aspect-ratio: 1920 / 1280;
+        margin: 0 auto;
         overflow: hidden;
         position: relative;
       }
@@ -54,10 +56,10 @@
         outline: 0;
       }
     </style>
-    <title>Document</title>
+    <title>Image Slide</title>
   </head>
   <body>
-    <div id="slide-show">
+    <div id="slideShow">
       <div id="slides">
         <img src="images/image01.jpg" alt="crimson rosella" />
         <img src="images/image02.jpg" alt="sulphur-crested cockatoo" />

@@ -13,7 +13,7 @@ const noParrotArr = [
   "20",
 ];
 const birdArr = parrotArr.concat(noParrotArr);
-const PARROT_NUM = parrotArr.length;
+const PARROT_COUNT = parrotArr.length;
 
 // create bird list
 const birdList = birdArr.map((val) => {
@@ -107,12 +107,15 @@ const checkAnswer = () => {
   );
 
   // container 의 children 개수가 늦게 반영되는 문제로 - 1 적용
-  document.getElementById("parrots_num").textContent =
+  document.getElementById("parrotsNum").textContent =
     parrotArr.length - correctItems;
-  document.getElementById("birds_num").textContent =
+  document.getElementById("birdsNum").textContent =
     parrotConItems.length - 1 - correctItems;
 
-  if (parrotConItems.length - 1 === PARROT_NUM && correctItems === PARROT_NUM)
+  if (
+    parrotConItems.length - 1 === PARROT_COUNT &&
+    correctItems === PARROT_COUNT
+  )
     alert("Hurray!");
 };
 checkAnswer();
