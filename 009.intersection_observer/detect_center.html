@@ -8,21 +8,57 @@
       :root {
         --hand-size: 20vh;
       }
-      h1 {
-        font-size: 5rem;
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-      body {
+      body,
+      #cover,
+      .hand {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+      }
+      #cover {
+        width: 100%;
+        height: 95vh;
+        font-style: italic;
+        border-radius: 0 0 500px 500px;
+        background-color: rgb(135, 206, 235);
+        font-size: 10vw;
+        font-weight: 700;
+        position: relative;
+      }
+      #cover:after {
+        position: absolute;
+        bottom: 15vh;
+        content: "\2304";
+        font-style: normal;
+        font-size: 4rem;
+        animation: 1s infinite ease-in-out updown;
+      }
+      #cover > *:nth-child(1) {
+        margin-right: 25%;
+      }
+      #cover > *:nth-child(2) {
+        margin-left: 15%;
+        margin-bottom: 10vh;
+      }
+      @keyframes updown {
+        60% {
+          transform: translateY(50px);
+        }
+        100% {
+          transform: translateY(0);
+        }
+      }
+      body {
         gap: var(--hand-size);
-        margin: calc(var(--hand-size) * 1.4);
+        margin-bottom: calc(var(--hand-size) * 1.4);
       }
       .hand {
-        display: flex;
-        justify-content: center;
-        align-items: center;
         width: var(--hand-size);
         font-size: var(--hand-size);
         aspect-ratio: 1/1;
@@ -31,7 +67,6 @@
         animation: wave 0.6s 2 linear;
         transform-origin: bottom center;
       }
-
       @keyframes wave {
         0% {
           transform: rotateZ(0deg);
@@ -46,11 +81,19 @@
           transform: rotateZ(0deg);
         }
       }
+      @media screen and (max-width: 1080px) {
+        #cover {
+          font-size: 15vw;
+        }
+      }
     </style>
     <title>Document</title>
   </head>
   <body>
-    <h1>SAY HELLO</h1>
+    <div id="cover">
+      <span>WAVE</span>
+      <span>HANDS!</span>
+    </div>
     <script>
       const body = document.querySelector("body");
       let i = 0;
@@ -74,7 +117,12 @@
             }
           });
         },
-        { rootMargin: "-50% 0% -50% 0%" }
+        /**
+         * cf)
+         * rootMargin: "-50% 0% -50% 0%" 로 지정할 경우,
+         * 일부 모바일 기기에서 제대로 작동하지 않는 문제 발생
+         */
+        { rootMargin: "-40% 0% -40% 0%" }
       );
 
       hands.forEach((hand) => {
