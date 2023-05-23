@@ -109,6 +109,8 @@ observer.observe(target);
 
 ## 적용
 
+- target 에 height 또는 충분한 margin 값 설정 필요
+
 ### [Lazy Loading](https://web.dev/fast/#lazy-load-images-and-video)
 
 ### Infinite Scroll

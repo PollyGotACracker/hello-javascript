@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      #container {
+        margin: 0 auto;
+        width: 70vw;
+        height: 200vh;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        justify-items: center;
+        align-items: center;
+        gap: 10px;
+      }
+      .box {
+        width: 200px;
+        height: 200px;
+        border-radius: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        font-size: 80pt;
+        font-weight: 900;
+        color: white;
+      }
+    </style>
+    <title>Infinitie Scroll</title>
+  </head>
+  <body>
+    <div id="container"></div>
+    <!-- <div id="more">LOADING</div> -->
+    <script>
+      // generate box item list
+      const genBox = () => {
+        const BOX_COUNT = 1000;
+        const _array = [...new Array(BOX_COUNT).keys()];
+        const array = _array.map((_, idx) => {
+          const hue = Math.floor(Math.random() * 360);
+          const color = `linear-gradient(125deg, hsla(${hue},50%,50%,0.5), hsla(${hue},50%,50%,1))`;
+          const box = { num: idx + 1, color: color };
+          return box;
+        });
+
+        sessionStorage.setItem("boxList", JSON.stringify(array));
+        return array;
+      };
+
+      let pageNum = 0;
+      let savedPageNum = Number(sessionStorage?.getItem("pageNum")) || 0;
+      let scrollPoint = Number(sessionStorage?.getItem("scrollPoint")) || 0;
+      const BOX_ARR =
+        JSON.parse(sessionStorage?.getItem("boxList")) || genBox();
+      const PAGE_SIZE = 50;
+
+      const saveScroll = () => {
+        sessionStorage.setItem("scrollPoint", document.body.offsetHeight);
+        sessionStorage.setItem("pageNum", pageNum);
+      };
+
+      const loadBox = () => {
+        // storage 에 pageNum 이 있을 경우 고려
+        if (savedPageNum) pageNum = savedPageNum;
+        const startNum = savedPageNum ? 0 : PAGE_SIZE * pageNum;
+        const endNum = PAGE_SIZE * (pageNum + 1);
+        savedPageNum = 0;
+        console.log(pageNum, startNum, endNum);
+
+        const sliceArr = BOX_ARR.slice(startNum, endNum);
+        const nextLoad = sliceArr.map((ele) => {
+          const box = document.createElement("A");
+          box.className = "box";
+          box.href = `./${ele.num}`;
+          box.textContent = ele.num;
+          box.style.background = ele.color;
+          return box;
+        });
+
+        const container = document.querySelector("#container");
+        container.append(...nextLoad);
+        [...nextLoad].forEach((box) => addEventListener("click", saveScroll));
+        scrollObserver.observe(container.lastElementChild);
+      };
+
+      const scrollObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(({ target, isIntersecting, intersectionRatio }) => {
+          if (isIntersecting && intersectionRatio > 0) {
+            pageNum += 1;
+            loadBox();
+            observer.unobserve(target);
+          }
+        });
+      });
+
+      loadBox();
+      document.documentElement.scrollTop = scrollPoint;
+    </script>
+  </body>
+</html>
