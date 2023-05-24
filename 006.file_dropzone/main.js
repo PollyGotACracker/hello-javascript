@@ -9,20 +9,36 @@ let currentFiles = input?.files;
 const checkUnique = (fileList) => {
   // 현재 파일 리스트에서 lastModified(id 로 사용) 값을 배열로 저장
   const removeIds = [...currentFiles].map((file) => file.lastModified);
-  const checkedFiles = fileList.filter((file) => {
-    const isUnique = !removeIds.includes(file.lastModified);
-    if (isUnique) return file;
-  });
+  const checkedFiles = fileList.filter(
+    (file) => !removeIds.includes(file.lastModified)
+  );
 
   if (checkedFiles.length === 0) {
     // input change 발생 시 무조건 최근 선택한 파일 리스트가 input 에 할당되는 문제 발생
-    // 그래서 currentFiles 를 재할당했음
+    // 그래서 currentFiles 를 재할당하여 변경되지 않도록 함
     input.files = currentFiles;
     return false;
   } else {
     return checkedFiles;
   }
 };
+
+// const getThumb = (src, type) => {
+//   const _img = new Image();
+//   _img.src = src;
+
+//   const canvas = document.createElement("canvas");
+//   const canvasContext = canvas.getContext("2d");
+
+//   canvas.width = _img.width * 0.5;
+//   canvas.height = _img.height * 0.5;
+//   canvasContext.drawImage(_img, 0, 0, canvas.width, canvas.height);
+//   const dataUrl = canvas.toDataURL(`${type}`);
+//   console.log(type);
+//   console.log(dataUrl);
+
+//   return dataUrl;
+// };
 
 // thumbnail 을 위한 node 생성
 const createNode = (tag, attr, ...children) => {
@@ -63,25 +79,23 @@ const createNode = (tag, attr, ...children) => {
   return node;
 };
 
-// 업로드 파일 리스트 업데이트
-const updateFiles = ({ newFiles, isDeleted }) => {
-  // newFiles:
-  // isDelete 일 경우 삭제 파일을 제외한 파일 전체 리스트
-  // 그 외에는 중복을 제외한 추가 파일들
-  const files = !isDeleted ? [...currentFiles, ...newFiles] : [...newFiles];
-
-  const dataTransfer = new DataTransfer();
-  files.forEach((file) => {
-    dataTransfer.items.add(file);
-  });
-  input.files = dataTransfer.files;
-  currentFiles = dataTransfer.files;
-
+const updateThumbs = ({ newFiles, deleteId }) => {
   // preview 의 thumbnail 추가
-  if (isDeleted) preview.innerHTML = "";
+  if (deleteId) {
+    [...preview.children].forEach((thumb) => {
+      if (thumb.dataset.id === deleteId) thumb.remove();
+    });
+    return false;
+  }
+
   [...newFiles].forEach((file) => {
     const reader = new FileReader();
     reader.addEventListener("load", (e) => {
+      // const dataUrl = getThumb(e.target?.result, file.type);
+      // const img = createNode("img", {
+      //   className: "embed-img",
+      //   src: dataUrl,
+      // });
       const img = createNode("img", {
         className: "embed-img",
         src: e.target?.result,
@@ -100,6 +114,18 @@ const updateFiles = ({ newFiles, isDeleted }) => {
     });
     reader.readAsDataURL(file);
   });
+};
+
+// 업로드 파일 리스트 업데이트
+const updateFiles = (fileList) => {
+  const files = [...fileList];
+
+  const dataTransfer = new DataTransfer();
+  files.forEach((file) => {
+    dataTransfer.items.add(file);
+  });
+  input.files = dataTransfer.files;
+  currentFiles = dataTransfer.files;
 };
 
 const enterDrag = (e) => {
@@ -133,27 +159,38 @@ const dropFiles = (e) => {
   const dropFiles = [...e.dataTransfer?.files];
   if (dropFiles) {
     // drop 할 경우 input accept 가 적용되지 않으므로 별도 검사
-    const fileList = [...dropFiles].filter((file) => /^image/.test(file.type));
-    const newFiles = checkUnique(fileList);
-    if (newFiles) updateFiles({ newFiles });
+    const _fileList = [...dropFiles].filter((file) => /^image/.test(file.type));
+    const newFiles = checkUnique(_fileList);
+    if (newFiles) {
+      const fileList = [...currentFiles, ...newFiles];
+      updateFiles(fileList);
+      updateThumbs({ newFiles });
+    }
   }
 };
 
 const selectFiles = (e) => {
-  const fileList = [...e.target.files];
-  const newFiles = checkUnique(fileList);
-  if (newFiles) updateFiles({ newFiles });
+  const _fileList = [...e.target.files];
+  const newFiles = checkUnique(_fileList);
+  if (newFiles) {
+    const fileList = [...currentFiles, ...newFiles];
+    updateFiles(fileList);
+    updateThumbs({ newFiles });
+  }
 };
 
 const deleteFile = (e) => {
   // label click 방지를 위해 추가
   e.preventDefault();
+
   const deleteId = e.currentTarget.dataset.id;
+
   const newFiles = [...currentFiles].filter((file) => {
     const isPreserved = file.lastModified !== Number(deleteId);
     if (isPreserved) return file;
   });
-  updateFiles({ newFiles, isDeleted: true });
+  updateFiles(newFiles);
+  updateThumbs({ newFiles, deleteId });
 };
 
 input.addEventListener("change", selectFiles);
