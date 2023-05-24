@@ -10,38 +10,91 @@
         margin: 0;
         padding: 0;
       }
+      body {
+        padding: 5vh 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
       #container {
         margin: 0 auto;
         width: 70vw;
-        height: 200vh;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         justify-items: center;
         align-items: center;
+        margin-bottom: 10vh;
         gap: 10px;
       }
       .box {
-        width: 200px;
-        height: 200px;
+        width: 250px;
+        height: 250px;
         border-radius: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
         text-decoration: none;
-        font-size: 80pt;
+        font-size: 60pt;
         font-weight: 900;
         color: white;
+        animation: 0.3s ease-in fadeIn;
+      }
+      #loading,
+      #loading:before {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #loading {
+        font-size: 20pt;
+        font-weight: 700;
+        padding: 20px;
+      }
+      #loading:before {
+        content: "";
+        width: 50px;
+        height: 50px;
+        color: gray;
+        transform-origin: center;
+        animation: 1s infinite linear loading;
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0.1;
+          pointer-events: none;
+        }
+        100% {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      }
+      @keyframes loading {
+        0% {
+          content: "▖";
+        }
+        45% {
+          content: "▘";
+        }
+        55% {
+          content: "▝";
+        }
+        100% {
+          content: "▗";
+        }
       }
     </style>
     <title>Infinitie Scroll</title>
   </head>
   <body>
     <div id="container"></div>
-    <!-- <div id="more">LOADING</div> -->
+    <div id="loading">LOADING...</div>
     <script>
+      const BOX_COUNT = 1000;
+      const PAGE_SIZE = 50;
+      const LAST_PAGE_NUM = Math.ceil(BOX_COUNT / PAGE_SIZE);
+
       // generate box item list
       const genBox = () => {
-        const BOX_COUNT = 1000;
         const _array = [...new Array(BOX_COUNT).keys()];
         const array = _array.map((_, idx) => {
           const hue = Math.floor(Math.random() * 360);
@@ -59,7 +112,6 @@
       let scrollPoint = Number(sessionStorage?.getItem("scrollPoint")) || 0;
       const BOX_ARR =
         JSON.parse(sessionStorage?.getItem("boxList")) || genBox();
-      const PAGE_SIZE = 50;
 
       const saveScroll = () => {
         sessionStorage.setItem("scrollPoint", document.body.offsetHeight);
@@ -86,15 +138,22 @@
 
         const container = document.querySelector("#container");
         container.append(...nextLoad);
+
         [...nextLoad].forEach((box) => addEventListener("click", saveScroll));
-        scrollObserver.observe(container.lastElementChild);
+
+        if (pageNum !== LAST_PAGE_NUM) {
+          scrollObserver.observe(container.lastElementChild);
+        } else {
+          document.querySelector("#loading").style.display = "none";
+        }
       };
 
       const scrollObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(({ target, isIntersecting, intersectionRatio }) => {
           if (isIntersecting && intersectionRatio > 0) {
             pageNum += 1;
-            loadBox();
+            setTimeout(loadBox, 1000);
+            saveScroll();
             observer.unobserve(target);
           }
         });
