@@ -20,6 +20,10 @@
   따라서 전역 변수 `let counter = 0;` 를 선언하고 enter 시 `counter++`, leave 시 `counter--`
   parent 에 마지막 dragleave 이벤트가 발생하는 시점(counter === 0)에만 원하는 동작이 수행되도록 할 것
   참고: [https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element](https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element)
+- `input.files` 의 각 file 에서 `lastModified` property 를 file 의 id 로 사용(String)
+- !! canvas 를 이용해 이미지를 resize 할 때, gif 나 webp 등 움직이는 이미지 형식은  
+  생성된 이미지가 깨져서 표시되지 않거나, 원본 이미지와는 다른 확장자로 저장되거나(gif => png), 생성된 이미지가 움직이지 않는 문제 발생  
+  따라서 jpeg 형식으로 통일하여 표시했음
 
 ### [DataTransfer 객체](https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer)
 

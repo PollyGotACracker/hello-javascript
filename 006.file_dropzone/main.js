@@ -23,22 +23,24 @@ const checkUnique = (fileList) => {
   }
 };
 
-// const getThumb = (src, type) => {
-//   const _img = new Image();
-//   _img.src = src;
+const resizeThumb = (src, type) => {
+  // const animatedImgs = ["image/gif", "image/webp", "image/apng", "image/avif"];
+  // if (animatedImgs.includes(type)) return src;
+  const SCALE = 0.5;
+  const _img = new Image();
+  _img.src = src;
 
-//   const canvas = document.createElement("canvas");
-//   const canvasContext = canvas.getContext("2d");
+  const canvas = document.createElement("canvas");
+  const canvasContext = canvas.getContext("2d");
 
-//   canvas.width = _img.width * 0.5;
-//   canvas.height = _img.height * 0.5;
-//   canvasContext.drawImage(_img, 0, 0, canvas.width, canvas.height);
-//   const dataUrl = canvas.toDataURL(`${type}`);
-//   console.log(type);
-//   console.log(dataUrl);
+  canvas.width = _img.width * SCALE;
+  canvas.height = _img.height * SCALE;
+  canvasContext.drawImage(_img, 0, 0, canvas.width, canvas.height);
+  // const dataUrl = canvas.toDataURL(`${type}`);
+  const dataUrl = canvas.toDataURL(`image/jpeg`);
 
-//   return dataUrl;
-// };
+  return dataUrl;
+};
 
 // thumbnail 을 위한 node 생성
 const createNode = (tag, attr, ...children) => {
@@ -79,8 +81,8 @@ const createNode = (tag, attr, ...children) => {
   return node;
 };
 
+// preview 의 thumbnail 추가 또는 삭제
 const updateThumbs = ({ newFiles, deleteId }) => {
-  // preview 의 thumbnail 추가
   if (deleteId) {
     [...preview.children].forEach((thumb) => {
       if (thumb.dataset.id === deleteId) thumb.remove();
@@ -91,14 +93,10 @@ const updateThumbs = ({ newFiles, deleteId }) => {
   [...newFiles].forEach((file) => {
     const reader = new FileReader();
     reader.addEventListener("load", (e) => {
-      // const dataUrl = getThumb(e.target?.result, file.type);
-      // const img = createNode("img", {
-      //   className: "embed-img",
-      //   src: dataUrl,
-      // });
+      const _dataUrl = resizeThumb(e.target?.result, file.type);
       const img = createNode("img", {
         className: "embed-img",
-        src: e.target?.result,
+        src: _dataUrl,
       });
       const imgContainer = createNode(
         "div",
