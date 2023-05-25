@@ -22,7 +22,8 @@
   단, eventListener 의 callback 은 모든 코드가 실행되기 전까지 blocking 된다는 점에 유의
 - load eventListener 가 설정된 기존 객체의 속성이 변경될 경우 callback 이 loop 하는 오류 발생
   따라서 기존 객체와 변경할 객체를 별도로 생성하고 변경할 객체에 load eventListener 를 사용할 것
-- canvas 를 이용해 이미지를 resize 할 때, gif 나 webp 등 움직이는 이미지 형식은 생성된 이미지가 움직이지 않는 문제가 발생하며, 원본 이미지와는 다른 확장자로 저장되기도 함(gif 만 png 로 변경되었는데 원인을 찾지 못함)  
+- canvas 를 이용해 이미지를 resize 할 때, gif 나 webp 등 움직이는 이미지 형식은 생성된 이미지가 움직이지 않으며,  
+  image/gif 포맷이 지원되지 않아 `toDataURL()` 에서 기본 확장자인 image/png 가 반환되는 등의 문제 발생  
   따라서 animated 확장자를 별도로 처리하거나, 한 가지 확장자로 통일하여 표시
 
 ## 공부

@@ -41,7 +41,7 @@ const resizeThumb = (node, src, type) => {
     canvas.height = img.height * SCALE;
     canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
     // const url = canvas.toDataURL(`${type}`);
-    const url = canvas.toDataURL(`image/jpeg`);
+    const url = canvas.toDataURL(`image/jpeg`, 1.0);
     node.src = url;
   };
 };
