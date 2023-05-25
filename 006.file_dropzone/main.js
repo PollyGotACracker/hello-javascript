@@ -23,23 +23,27 @@ const checkUnique = (fileList) => {
   }
 };
 
-const resizeThumb = (src, type) => {
+const resizeThumb = (node, src, type) => {
   // const animatedImgs = ["image/gif", "image/webp", "image/apng", "image/avif"];
-  // if (animatedImgs.includes(type)) return src;
-  const SCALE = 0.5;
-  const _img = new Image();
-  _img.src = src;
+  // if (animatedImgs.includes(type)) {
+  //   node.src = src;
+  //   return false;
+  // }
 
+  const img = new Image();
+  img.src = src;
   const canvas = document.createElement("canvas");
   const canvasContext = canvas.getContext("2d");
 
-  canvas.width = _img.width * SCALE;
-  canvas.height = _img.height * SCALE;
-  canvasContext.drawImage(_img, 0, 0, canvas.width, canvas.height);
-  // const dataUrl = canvas.toDataURL(`${type}`);
-  const dataUrl = canvas.toDataURL(`image/jpeg`);
-
-  return dataUrl;
+  img.onload = () => {
+    const SCALE = 0.5;
+    canvas.width = img.width * SCALE;
+    canvas.height = img.height * SCALE;
+    canvasContext.drawImage(img, 0, 0, canvas.width, canvas.height);
+    // const url = canvas.toDataURL(`${type}`);
+    const url = canvas.toDataURL(`image/jpeg`);
+    node.src = url;
+  };
 };
 
 // thumbnail 을 위한 node 생성
@@ -93,11 +97,11 @@ const updateThumbs = ({ newFiles, deleteId }) => {
   [...newFiles].forEach((file) => {
     const reader = new FileReader();
     reader.addEventListener("load", (e) => {
-      const _dataUrl = resizeThumb(e.target?.result, file.type);
       const img = createNode("img", {
         className: "embed-img",
-        src: _dataUrl,
+        // src: e.target?.result,
       });
+      resizeThumb(img, e.target?.result, file?.type);
       const imgContainer = createNode(
         "div",
         {
@@ -183,10 +187,9 @@ const deleteFile = (e) => {
 
   const deleteId = e.currentTarget.dataset.id;
 
-  const newFiles = [...currentFiles].filter((file) => {
-    const isPreserved = file.lastModified !== Number(deleteId);
-    if (isPreserved) return file;
-  });
+  const newFiles = [...currentFiles].filter(
+    (file) => file.lastModified !== Number(deleteId)
+  );
   updateFiles(newFiles);
   updateThumbs({ newFiles, deleteId });
 };
