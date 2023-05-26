@@ -17,8 +17,8 @@
 - !! 제대로 이해하지 못했을 수도 있음
 - 참고: [https://stackoverflow.com/questions/74335612/drag-and-drop-when-using-flex-wrap](https://stackoverflow.com/questions/74335612/drag-and-drop-when-using-flex-wrap)
 
-1. Box 의 dragover event 로 호출되는 `getAfterDragging(box, x, y)` 함수는 현재 drag 중인 요소 뒤에 있는 요소를 반환한다.  
-   함수는 dragover event 가 발생한 target, event.clientX, event.clientY 를 받는다.
+1. container 의 dragover event 로 호출되는 `getAfterDragging(container, x, y)` 함수는 현재 drag 중인 위치 바로 뒤에 있는 요소를 반환한다.  
+   함수는 dragover event 가 발생한 target 인 container, event.clientX, event.clientY 를 받는다.
 2. `notDraggings`: target 에서 drag 되고 있지 않은 요소 리스트를 배열로 가져온다.
 3. `Array.reduce()` 를 사용해 `notDraggings` 의 각 요소를 순회한다.  
    `return notDraggings.reduce((closest, item, index)=>{},{ offset: Number.NEGATIVE_INFINITY }).element`
