@@ -32,11 +32,35 @@ const birdInfo = [
 
 let currentNum, currentName;
 
+const changeBirdInfo = () => {
+  const img = modal.querySelector(".modal-img");
+  const desc = modal.querySelector(".modal-desc");
+  const btnSearch = modal.querySelector(".modal-search");
+
+  if (currentNum !== 0) {
+    img.src = `./images/bird${currentNum}.png`;
+    desc.textContent = currentName;
+    btnSearch.textContent = `Search ${currentName} on Google`;
+  }
+  if (currentNum === 0) {
+    img.src = "";
+    desc.textContent = "";
+    btnSearch.textContent = "";
+  }
+};
+
+const setCurrent = (dataNum) => {
+  const [{ num, name }] = birdInfo.filter((bird) => bird.num === dataNum);
+  currentNum = num;
+  currentName = name;
+  changeBirdInfo();
+};
+
 const openModal = (e) => {
   const targetNum = e.currentTarget.dataset.num;
   modal.classList.add("open");
   blurBox.classList.add("active");
-  showBirdInfo(targetNum);
+  setCurrent(targetNum);
 };
 
 const closeModal = () => {
@@ -44,20 +68,7 @@ const closeModal = () => {
   blurBox.classList.remove("active");
   currentNum = 0;
   currentName = "";
-};
-
-const showBirdInfo = (dataNum) => {
-  const [{ num, name }] = birdInfo.filter((bird) => bird.num === dataNum);
-  currentNum = num;
-  currentName = name;
-
-  const img = modal.querySelector(".modal-img");
-  const desc = modal.querySelector(".modal-desc");
-  const btnSearch = modal.querySelector(".modal-search");
-
-  img.src = `./images/bird${currentNum}.png`;
-  desc.textContent = currentName;
-  btnSearch.textContent = `Search ${currentName} on Google`;
+  changeBirdInfo();
 };
 
 birdInfo.forEach((bird) => {
