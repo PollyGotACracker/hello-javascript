@@ -16,17 +16,17 @@ const PARROT_COUNT = parrotArr.length;
 
 // create bird list
 const birdList = birdArr.map((num) => {
-  const btn = document.createElement("BUTTON");
-  btn.className = "bird";
-  btn.setAttribute("type", "button");
-  btn.setAttribute("draggable", "true");
-  btn.dataset.num = num;
-  btn.title = `bird`;
+  const div = document.createElement("DIV");
+  div.className = "bird";
+  div.setAttribute("draggable", "true");
+  div.dataset.num = num;
+
   const img = document.createElement("IMG");
   img.src = `./images/bird${num}.png`;
   img.title = `bird`;
-  btn.appendChild(img);
-  return btn;
+
+  div.appendChild(img);
+  return div;
 });
 
 // randomize bird list items
@@ -43,54 +43,49 @@ while (i <= birdList.length * 5) {
 }
 
 // set bird items
-const birdBoxs = document.querySelectorAll(".bird-box");
-birdBoxs[0].append(...birdList.slice(0, 10));
-birdBoxs[1].append(...birdList.slice(-10));
+const containers = document.querySelectorAll(".bird-box");
+containers[0].append(...birdList.slice(0, 10));
+containers[1].append(...birdList.slice(-10));
 
 const birds = document.querySelectorAll(".bird");
 
-const getAfterDragging = (birdBox, x, y) => {
+const getAfterDragging = (container, x, y) => {
   // 현재 드래그 중인 요소를 제외한 나머지
-  const notDraggings = [...birdBox.querySelectorAll(".bird:not(.dragging)")];
+  const notDraggings = [...container.querySelectorAll(".bird:not(.dragging)")];
 
-  // nextBox, inRow: 요소가 wrap 되는 경우...
   return notDraggings.reduce(
     (closest, item, index) => {
       const box = item.getBoundingClientRect();
-      // item 의 다음 요소가 있을 때
       const nextBox =
         notDraggings[index + 1] &&
         notDraggings[index + 1].getBoundingClientRect();
-      // 드래그 이벤트가 일어나는 지점이 item과 같은 행인지 확인
-      // 현재 드래그 지점이 bottom 위치보다 위 && top 위치보다 아래
       const inRow = y - box.bottom <= 0 && y - box.top >= 0;
-      /**
-       * offset?
-       */
       const offset = x - box.left - box.width / 2;
-      // column 일 경우:
+      // direction 이 column 일 경우:
       // const offset = y - box.top - box.height / 2;
 
-      // 같은 행일 때
+      const isAfterInRow = offset < 0 && offset > closest.offset;
+      const isAfterInNextRow =
+        nextBox &&
+        y - nextBox.top <= 0 &&
+        closest.offset === Number.NEGATIVE_INFINITY;
+
       if (inRow) {
-        //
-        if (offset < 0 && offset > closest.offset) {
+        if (isAfterInRow) {
           return { offset: offset, element: item };
-        } else {
-          if (
-            nextBox &&
-            y - nextBox.top <= 0 &&
-            closest.offset === Number.NEGATIVE_INFINITY
-          ) {
-            return {
-              offset: 0,
-              element: notDraggings[index + 1],
-            };
-          }
-          return closest;
         }
-        // 다른 행일 때 acc 반환
-      } else {
+        if (isAfterInNextRow) {
+          return { offset: 0, element: notDraggings[index + 1] };
+        }
+        return closest;
+      }
+      if (!inRow) {
+        if (
+          isAfterInNextRow &&
+          container.contains(document.querySelector(".dragging"))
+        ) {
+          return { offset: 0, element: false };
+        }
         return closest;
       }
     },
@@ -99,7 +94,7 @@ const getAfterDragging = (birdBox, x, y) => {
 };
 
 const checkAnswer = () => {
-  const parrotConItems = Array.from(birdBoxs[1].children);
+  const parrotConItems = Array.from(containers[1].children);
   let correctItems = 0;
   parrotConItems.forEach((item) =>
     parrotArr.forEach((num) => {
@@ -107,15 +102,15 @@ const checkAnswer = () => {
     })
   );
 
-  // box 의 children 개수가 가끔 다르게 표시되는 문제?
+  // children 개수가 가끔 다르게 표시되는 문제?
   document.getElementById("parrotsNum").textContent =
     parrotArr.length - correctItems;
   document.getElementById("birdsNum").textContent =
     parrotConItems.length - correctItems;
 
   if (parrotConItems.length === PARROT_COUNT && correctItems === PARROT_COUNT) {
-    birdBoxs.forEach((birdBox) => {
-      birdBox.style.pointerEvents = "none";
+    containers.forEach((container) => {
+      container.style.pointerEvents = "none";
     });
     setTimeout(() => alert("Hurray!"), 200);
   }
@@ -123,27 +118,29 @@ const checkAnswer = () => {
 
 // bird item addEventListener
 birds.forEach((bird) => {
-  bird.addEventListener("dragstart", () => bird.classList.add("dragging"));
+  bird.addEventListener("dragstart", () => {
+    bird.classList.add("dragging");
+  });
   bird.addEventListener("dragend", () => {
     bird.classList.remove("dragging");
     checkAnswer();
   });
 });
 
-// box addEventListener
-birdBoxs.forEach((birdBox) => {
-  // dragover: 해당 요소 위에서 드래그하는 매 시점마다
-  birdBox.addEventListener("dragover", (e) => {
+// container addEventListener
+containers.forEach((container) => {
+  // dragover: 해당 요소 위에서 drag 하는 매 시점마다
+  container.addEventListener("dragover", (e) => {
     e.preventDefault();
-    // e.clientX: 화면 왼쪽부터 이벤트가 발생한 지점까지
-    const afterItem = getAfterDragging(birdBox, e.clientX, e.clientY);
+
+    // e.clientX: 화면 왼쪽부터 drag가 발생한 지점까지의 좌표값
+    const afterItem = getAfterDragging(container, e.clientX, e.clientY);
+
+    // drag 한 요소의 위치 변경
     const dragging = document.querySelector(".dragging");
-    // 마지막 위치로 드래그 할 경우
-    if (afterItem === undefined) {
-      birdBox.appendChild(dragging);
-    } else {
-      birdBox.insertBefore(dragging, afterItem);
-    }
+    if (afterItem === false) return false;
+    if (afterItem === undefined) container.appendChild(dragging);
+    if (afterItem) container.insertBefore(dragging, afterItem);
   });
 });
 
