@@ -109,7 +109,7 @@ observer.observe(target);
 
 ## 적용
 
-- target 에 height 또는 충분한 margin 값 설정 필요
+- 감시되는 요소에 height 값 또는 충분한 margin 값 설정이 필요하다.
 
 ### [Lazy Loading](https://web.dev/fast/#lazy-load-images-and-video)
 

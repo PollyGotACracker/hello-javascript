@@ -198,7 +198,6 @@ input.addEventListener("change", selectFiles);
 label.addEventListener("dragenter", enterDrag);
 label.addEventListener("dragleave", leaveDrag);
 label.addEventListener("drop", dropFiles);
-// !! dragover 가 없으면 drop 이 발생하지 않음 !!
 label.addEventListener("dragover", (e) => {
   e.preventDefault();
 });

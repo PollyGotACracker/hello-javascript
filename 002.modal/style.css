@@ -1,0 +1,155 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  width: 100vw;
+  height: 100vh;
+}
+body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 전체 section */
+nav,
+main {
+  display: flex;
+}
+
+/* btnBox */
+nav#btnBox {
+  background-color: white;
+  height: 20%;
+  justify-content: center;
+  align-items: center;
+}
+nav#btnBox > button {
+  width: 30%;
+  height: 30%;
+  margin: 0 0.5em;
+  cursor: pointer;
+}
+
+/* birdBox */
+main#birdBox {
+  flex-direction: row;
+  width: 200vw;
+  height: 80%;
+  transition: all 1s;
+}
+/* active class 로 slide 구현... */
+main#birdBox.active {
+  transform: translateX(-100vw);
+}
+
+/* box style */
+main#birdBox > div {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+main#birdBox > .box-blue {
+  background-color: blue;
+}
+main#birdBox > .box-red {
+  background-color: red;
+}
+.bird {
+  cursor: pointer;
+}
+#modal {
+  position: fixed;
+  width: 50%;
+  height: 50%;
+  top: 25%;
+  left: 25%;
+  z-index: -1;
+  opacity: 0;
+  transform: translateY(-15px);
+  transition: all 0.2s ease-in-out;
+  border-radius: 10px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+#blur {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 100%;
+  height: 100%;
+  z-index: -999;
+  opacity: 0.5;
+  transition: opacity 0.2s linear;
+}
+#modal.open {
+  z-index: 100;
+  opacity: 1;
+  transform: translateY(15px);
+}
+#blur.active {
+  z-index: 99;
+  opacity: 1;
+}
+#modal > * {
+  width: 100%;
+  padding: 10px;
+}
+#modal button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  user-select: none;
+}
+#modal button:hover {
+  color: blue;
+}
+#modal > .modal-header {
+  position: relative;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  font-size: 20pt;
+  font-weight: 700;
+  text-align: center;
+}
+.modal-header > .modal-close {
+  border-radius: 50%;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: calc(50% - 15px);
+  right: 10px;
+}
+#modal > .modal-img-box {
+  flex: 1;
+  width: 15rem;
+  display: flex;
+  align-items: center;
+}
+.modal-img-box > .modal-img {
+  width: 100%;
+}
+#modal > .modal-desc {
+  flex: 1;
+  text-align: center;
+}
+@media screen and (max-width: 700px) {
+  #modal {
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+  }
+}
