@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>Scheduling</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./reset.css" />
+    <link rel="stylesheet" type="text/css" href="./time.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Play&amp;family=Noto+Sans+KR&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="cursor">
+      <span class="circle"></span>
+    </div>
+    <div class="blind"></div>
+
+    <header>
+      <button class="btn-player" type="button">
+        <audio preload src=""></audio>
+      </button>
+      <button class="btn-sidebar" type="button"></button>
+    </header>
+
+    <main>
+      <section class="cover">
+        <div class="quote"></div>
+        <div class="today"></div>
+        <div class="clock"></div>
+        <button class="btn-changeFunc" type="button">Countdown Mode</button>
+      </section>
+
+      <section class="todo">
+        <div class="todo-listWrap">
+          <input
+            class="todo-input"
+            type="text"
+            placeholder="Type your task here!"
+          />
+          <button class="btn-update" type="button">UPDATE</button>
+          <ul class="todo-list"></ul>
+        </div>
+      </section>
+
+      <section class="weather"></section>
+
+      <section class="news"></section>
+
+      <section class="alarm">
+        <input type="number" /> : <input type="number" /> :
+        <input type="number" />
+        <div class="alarm-record"></div>
+        <button class="btn-alarm-switch" type="button">OFF</button>
+      </section>
+
+      <section class="stopwatch">
+        <div class="stopwatch-counter">00 : 00 . 00</div>
+        <button class="btn-stopwatch-start" type="button">START</button>
+        <button class="btn-stopwatch-pause" type="button">PAUSE</button>
+        <button class="btn-stopwatch-record" type="button">RECORD</button>
+        <button class="btn-stopwatch-stop" type="button">STOP</button>
+        <table class="stopwatch-record"></table>
+      </section>
+
+      <section class="timer">
+        <div class="progress-bar">
+          <span class="progress-ratio"></span>
+          <div class="timer-input">
+            <input type="number" /> : <input type="number" /> :
+            <input type="number" />
+          </div>
+          <div class="timer-counter"></div>
+        </div>
+        <button class="btn-timer-pause" type="button">PAUSE</button>
+        <button class="btn-timer-stop" type="button">STOP</button>
+      </section>
+
+      <section class="credit"></section>
+
+      <button class="btn-cover" type="button">Back To Main</button>
+    </main>
+
+    <nav>
+      <button class="btn-todo" type="button">TO DO</button>
+      <button class="btn-weather" type="button">WEATHER</button>
+      <button class="btn-news" type="button">NEWS</button>
+      <button class="btn-alarm" type="button">ALARM</button>
+      <button class="btn-stopwatch" type="button">STOPWATCH</button>
+      <button class="btn-timer" type="button">TIMER</button>
+    </nav>
+
+    <footer>
+      <button class="btn-credit" type="button">PollyGotACracker!</button>
+    </footer>
+  </body>
+  <script type="text/javascript" src="./time.js"></script>
+</html>

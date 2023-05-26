@@ -15,14 +15,16 @@ const birdArr = parrotArr.concat(noParrotArr);
 const PARROT_COUNT = parrotArr.length;
 
 // create bird list
-const birdList = birdArr.map((val) => {
+const birdList = birdArr.map((num) => {
   const btn = document.createElement("BUTTON");
   btn.className = "bird";
   btn.setAttribute("type", "button");
   btn.setAttribute("draggable", "true");
-  btn.dataset.num = val;
+  btn.dataset.num = num;
+  btn.title = `bird`;
   const img = document.createElement("IMG");
-  img.src = `./images/bird${val}.png`;
+  img.src = `./images/bird${num}.png`;
+  img.title = `bird`;
   btn.appendChild(img);
   return btn;
 });
@@ -41,15 +43,15 @@ while (i <= birdList.length * 5) {
 }
 
 // set bird items
-const containers = document.querySelectorAll(".container");
-containers[0].append(...birdList.slice(0, 10));
-containers[1].append(...birdList.slice(-10));
+const birdBoxs = document.querySelectorAll(".bird-box");
+birdBoxs[0].append(...birdList.slice(0, 10));
+birdBoxs[1].append(...birdList.slice(-10));
 
 const birds = document.querySelectorAll(".bird");
 
-const getAfterDragging = (container, x, y) => {
+const getAfterDragging = (birdBox, x, y) => {
   // 현재 드래그 중인 요소를 제외한 나머지
-  const notDraggings = [...container.querySelectorAll(".bird:not(.dragging)")];
+  const notDraggings = [...birdBox.querySelectorAll(".bird:not(.dragging)")];
 
   // nextBox, inRow: 요소가 wrap 되는 경우...
   return notDraggings.reduce(
@@ -97,7 +99,7 @@ const getAfterDragging = (container, x, y) => {
 };
 
 const checkAnswer = () => {
-  const parrotConItems = Array.from(containers[1].children);
+  const parrotConItems = Array.from(birdBoxs[1].children);
   let correctItems = 0;
   parrotConItems.forEach((item) =>
     parrotArr.forEach((num) => {
@@ -105,19 +107,19 @@ const checkAnswer = () => {
     })
   );
 
-  // container 의 children 개수가 늦게 반영되는 문제로 - 1 적용
+  // box 의 children 개수가 가끔 다르게 표시되는 문제?
   document.getElementById("parrotsNum").textContent =
     parrotArr.length - correctItems;
   document.getElementById("birdsNum").textContent =
-    parrotConItems.length - 1 - correctItems;
+    parrotConItems.length - correctItems;
 
-  if (
-    parrotConItems.length - 1 === PARROT_COUNT &&
-    correctItems === PARROT_COUNT
-  )
-    alert("Hurray!");
+  if (parrotConItems.length === PARROT_COUNT && correctItems === PARROT_COUNT) {
+    birdBoxs.forEach((birdBox) => {
+      birdBox.style.pointerEvents = "none";
+    });
+    setTimeout(() => alert("Hurray!"), 200);
+  }
 };
-checkAnswer();
 
 // bird item addEventListener
 birds.forEach((bird) => {
@@ -128,19 +130,21 @@ birds.forEach((bird) => {
   });
 });
 
-// container addEventListener
-containers.forEach((container) => {
+// box addEventListener
+birdBoxs.forEach((birdBox) => {
   // dragover: 해당 요소 위에서 드래그하는 매 시점마다
-  container.addEventListener("dragover", (e) => {
+  birdBox.addEventListener("dragover", (e) => {
     e.preventDefault();
     // e.clientX: 화면 왼쪽부터 이벤트가 발생한 지점까지
-    const afterItem = getAfterDragging(container, e.clientX, e.clientY);
+    const afterItem = getAfterDragging(birdBox, e.clientX, e.clientY);
     const dragging = document.querySelector(".dragging");
     // 마지막 위치로 드래그 할 경우
     if (afterItem === undefined) {
-      container.appendChild(dragging);
+      birdBox.appendChild(dragging);
     } else {
-      container.insertBefore(dragging, afterItem);
+      birdBox.insertBefore(dragging, afterItem);
     }
   });
 });
+
+checkAnswer();

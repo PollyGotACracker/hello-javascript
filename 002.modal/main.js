@@ -42,6 +42,8 @@ const openModal = (e) => {
 const closeModal = () => {
   modal.classList.remove("open");
   blurBox.classList.remove("active");
+  currentNum = 0;
+  currentName = "";
 };
 
 const showBirdInfo = (dataNum) => {

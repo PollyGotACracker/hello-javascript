@@ -1,5 +1,7 @@
 # [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 
+- 2023.05
+
 - 이미지 또는 기타 콘텐츠의 지연 로딩
 - 무한 스크롤
 - 광고의 가시성 리포팅
