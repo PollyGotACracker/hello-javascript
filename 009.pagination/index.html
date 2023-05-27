@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        gap: 3vh;
+        padding: 3vh 0;
+      }
+      #container,
+      #paginationBox {
+        width: 80%;
+        margin: 0 auto;
+      }
+      .item {
+        display: grid;
+        grid-template-columns: 0.4fr 0.4fr 4fr 1fr;
+        grid-template-rows: 1fr 1fr;
+        align-items: center;
+        max-width: 100%;
+        height: 10%;
+        margin: 10px;
+        /* padding: 1%; */
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+      }
+      .item:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+      }
+      .item > .index {
+        grid-row: 1/3;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 5px 0 0 5px;
+      }
+      .item > .title {
+        grid-column: 2/4;
+        margin-left: 15px;
+      }
+      .item > .date {
+        font-size: 0.8rem;
+        text-align: right;
+        margin-right: 15px;
+      }
+      .item > .avatar {
+        width: 30px;
+        height: 30px;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 5px 8px 10px auto;
+      }
+      .avatar > img {
+        width: 80%;
+      }
+      .item > .nickname {
+        font-size: 0.8rem;
+        color: rgba(0, 0, 0, 0.8);
+        margin-bottom: 8px;
+      }
+      #paginationBox {
+        gap: 10px;
+      }
+      #paginationBox,
+      #pagination {
+        display: flex;
+        justify-content: center;
+        /* gap: 10px; */
+      }
+      #paginationBox button {
+        width: 40px;
+        height: 40px;
+        background-color: transparent;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        transition: all 0.2s ease;
+      }
+      #pagination button {
+        border: 0;
+        border-bottom: 3px solid rgba(0, 0, 0, 0.2);
+        border-radius: 0;
+      }
+      #paginationBox button:hover {
+        cursor: pointer;
+      }
+      #pagination button:hover {
+        border-bottom-color: rgb(79, 79, 218);
+      }
+      #paginationBox > button:hover {
+        background-color: rgba(79, 79, 218, 0.8);
+      }
+      #pagination button.active {
+        color: rgb(79, 79, 218);
+        border-bottom-color: rgb(79, 79, 218);
+      }
+    </style>
+    <title>Pagination</title>
+  </head>
+  <body>
+    <main id="container"></main>
+    <div id="paginationBox">
+      <button class="btn-prev">&lang;</button>
+      <div id="pagination"></div>
+      <button class="btn-next">&rang;</button>
+    </div>
+    <script>
+      const container = document.querySelector("#container");
+      const pagination = document.querySelector("#pagination");
+
+      const DATA_COUNT = 5000;
+      let showDataCount = 20;
+      let showPageCount = 10;
+      let offset = 0;
+      let pageNum = 1;
+      let pageStart = 1;
+      let pageEnd = Math.ceil(DATA_COUNT / showDataCount);
+
+      const genData = () => {
+        const _arr = [...new Array(DATA_COUNT).keys()];
+        const birdInfo = [
+          { num: "01", name: "Macaw", group: "parrot" },
+          { num: "02", name: "Cockatoo", group: "parrot" },
+          { num: "03", name: "African Grey Parrot", group: "parrot" },
+          { num: "04", name: "Kakapo", group: "parrot" },
+          { num: "05", name: "Rose-ringed Parakeet", group: "parrot" },
+          { num: "06", name: "Cockatiel", group: "parrot" },
+          { num: "07", name: "Lovebird", group: "parrot" },
+          { num: "08", name: "Budgerigar", group: "parrot" },
+          { num: "09", name: "Feather Duster Budgerigar", group: "parrot" },
+          { num: "10", name: "Parrotlet", group: "parrot" },
+          { num: "11", name: "Bateleur", group: "nonparrot" },
+          { num: "12", name: "Barn Owl", group: "nonparrot" },
+          { num: "13", name: "Quetzal", group: "nonparrot" },
+          { num: "14", name: "Toucan", group: "nonparrot" },
+          { num: "15", name: "Mandarin Duck", group: "nonparrot" },
+          { num: "16", name: "Booby", group: "nonparrot" },
+          { num: "17", name: "Western Parotia", group: "nonparrot" },
+          { num: "18", name: "Hoopoe", group: "nonparrot" },
+          { num: "19", name: "Hill Myna", group: "nonparrot" },
+          { num: "20", name: "Java Sparrow", group: "nonparrot" },
+        ];
+        return _arr.map((_, idx) => {
+          const randIdx = Math.floor(Math.random() * birdInfo.length);
+
+          const startDateValue = new Date(2012, 0, 1).getTime();
+          const endDateValue = new Date().getTime();
+          const randomDate = new Date(
+            Math.random() * (endDateValue - startDateValue) + startDateValue
+          );
+          const year = randomDate.getFullYear();
+          const month = randomDate.getMonth() + 1;
+          const date = randomDate.getDate();
+
+          return {
+            index: idx + 1,
+            title: `${birdInfo[randIdx].name} is a beautiful bird!`,
+            date: `${month}. ${date}. ${year}`,
+            avatar: `./images/bird${birdInfo[randIdx].num}.png`,
+            nickname: birdInfo[randIdx].name,
+          };
+        });
+      };
+      const DATA = genData();
+
+      const showPageBtns = () => {
+        let i = pageStart;
+        while (i < showPageCount + 1) {
+          const btn = document.createElement("BUTTON");
+          btn.textContent = i;
+          pagination.append(btn);
+          i++;
+        }
+      };
+
+      const genNode = (obj, imgKey) => {
+        const _nodes = {};
+
+        for (const key in obj) {
+          const node = document.createElement("DIV");
+          if (key !== imgKey) node.textContent = obj[key];
+          node.className = key;
+          _nodes[key] = node;
+        }
+
+        const img = document.createElement("IMG");
+        img.src = obj[imgKey];
+        _nodes[imgKey].append(img);
+
+        const result = Object.values(_nodes);
+        return result;
+      };
+
+      const showData = () => {
+        const sliced = DATA.slice(offset, showDataCount * pageNum);
+
+        const data = sliced.map((ele) => {
+          const item = document.createElement("DIV");
+          item.className = "item";
+          const nodes = genNode(ele, "avatar");
+          item.append(...nodes);
+          return item;
+        });
+        container.append(...data);
+        showPageBtns();
+      };
+
+      showData();
+    </script>
+  </body>
+</html>
