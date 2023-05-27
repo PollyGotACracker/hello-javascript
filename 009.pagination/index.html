@@ -5,6 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
       body {
         display: flex;
         flex-direction: column;
@@ -13,7 +18,7 @@
       }
       #container,
       #paginationBox {
-        width: 80%;
+        width: 60%;
         margin: 0 auto;
       }
       .item {
@@ -60,7 +65,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin: 5px 8px 10px auto;
+        margin: 5px 4px 10px auto;
       }
       .avatar > img {
         width: 80%;
@@ -70,40 +75,45 @@
         color: rgba(0, 0, 0, 0.8);
         margin-bottom: 8px;
       }
-      #paginationBox {
-        gap: 10px;
-      }
       #paginationBox,
       #pagination {
         display: flex;
         justify-content: center;
         /* gap: 10px; */
       }
-      #paginationBox button {
-        width: 40px;
-        height: 40px;
+      #paginationBox {
+        gap: 10px;
+      }
+      button {
+        width: 35px;
+        height: 35px;
         background-color: transparent;
         border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 5px;
         transition: all 0.2s ease;
+        user-select: none;
       }
-      #pagination button {
-        border: 0;
-        border-bottom: 3px solid rgba(0, 0, 0, 0.2);
-        border-radius: 0;
-      }
-      #paginationBox button:hover {
+      button:hover {
         cursor: pointer;
       }
-      #pagination button:hover {
+      .btn-page {
+        border: 0;
+        border-bottom: 3px solid transparent;
+        border-radius: 0;
+      }
+      .btn-page:hover {
+        border-bottom-color: rgb(79, 79, 218);
+      }
+      .btn-page.active {
+        color: rgb(79, 79, 218);
         border-bottom-color: rgb(79, 79, 218);
       }
       #paginationBox > button:hover {
         background-color: rgba(79, 79, 218, 0.8);
       }
-      #pagination button.active {
-        color: rgb(79, 79, 218);
-        border-bottom-color: rgb(79, 79, 218);
+      #paginationBox > button:disabled:hover {
+        background-color: transparent;
+        cursor: auto;
       }
     </style>
     <title>Pagination</title>
@@ -111,25 +121,36 @@
   <body>
     <main id="container"></main>
     <div id="paginationBox">
+      <button class="btn-first">&lang;&lang;</button>
       <button class="btn-prev">&lang;</button>
       <div id="pagination"></div>
       <button class="btn-next">&rang;</button>
+      <button class="btn-last">&rang;&rang;</button>
     </div>
     <script>
       const container = document.querySelector("#container");
       const pagination = document.querySelector("#pagination");
+      const prev = document.querySelector(".btn-prev");
+      const next = document.querySelector(".btn-next");
+      const first = document.querySelector(".btn-first");
+      const last = document.querySelector(".btn-last");
 
-      const DATA_COUNT = 5000;
-      let showDataCount = 20;
-      let showPageCount = 10;
-      let offset = 0;
-      let pageNum = 1;
-      let pageStart = 1;
-      let pageEnd = Math.ceil(DATA_COUNT / showDataCount);
+      const DATA_COUNT = 2048;
+      let dataSize = 20;
+      let pageSize = 10;
+
+      let dataOffset = 0;
+      let pageOffset = 1;
+      // pageCurrent: 버튼을 클릭했을 때 서버로 전송되는 현재 페이지 번호
+      let pageCurrent = 1;
+      //   let pageStart = Math.ceil(pageCurrent / pageSize);
+      //   let pageStart = 1;
+      //   let pageEnd = pageCurrent * pageSize;
+      let pageTotal = Math.ceil(DATA_COUNT / dataSize);
 
       const genData = () => {
         const _arr = [...new Array(DATA_COUNT).keys()];
-        const birdInfo = [
+        const birdData = [
           { num: "01", name: "Macaw", group: "parrot" },
           { num: "02", name: "Cockatoo", group: "parrot" },
           { num: "03", name: "African Grey Parrot", group: "parrot" },
@@ -151,34 +172,156 @@
           { num: "19", name: "Hill Myna", group: "nonparrot" },
           { num: "20", name: "Java Sparrow", group: "nonparrot" },
         ];
-        return _arr.map((_, idx) => {
-          const randIdx = Math.floor(Math.random() * birdInfo.length);
 
-          const startDateValue = new Date(2012, 0, 1).getTime();
-          const endDateValue = new Date().getTime();
-          const randomDate = new Date(
-            Math.random() * (endDateValue - startDateValue) + startDateValue
-          );
-          const year = randomDate.getFullYear();
-          const month = randomDate.getMonth() + 1;
-          const date = randomDate.getDate();
+        const dateData = _arr
+          .map((_) => {
+            const startDateValue = new Date(2000, 0, 1).getTime();
+            const endDateValue = new Date().getTime();
+            const randomDate = new Date(
+              Math.random() * (endDateValue - startDateValue) + startDateValue
+            );
+            const year = Number(randomDate.getFullYear());
+            const month = Number(randomDate.getMonth() + 1);
+            const date = Number(randomDate.getDate());
+
+            return [month, date, year];
+          })
+          .sort((previous, current) => {
+            // previous - current : 오름차순
+            // current - previous : 내림차순
+            // return value 음수 : p 가 c 보다 앞
+            // return value 0 : 순서 유지
+            // return value 양수 : c 가 p 보다 앞
+            let [monthP, dateP, yearP] = previous;
+            let [monthC, dateC, yearC] = current;
+
+            if (yearC > yearP) return 1;
+            if (yearC < yearP) return -1;
+            if (monthC > monthP) return 1;
+            if (monthC < monthP) return -1;
+            if (dateC > dateP) return 1;
+            if (dateC < dateP) return -1;
+            return 0;
+          });
+
+        return _arr.map((_, idx) => {
+          const randIdx = Math.floor(Math.random() * birdData.length);
+          const { num, name } = birdData[randIdx];
+          const [month, date, year] = dateData[idx];
 
           return {
             index: idx + 1,
-            title: `${birdInfo[randIdx].name} is a beautiful bird!`,
+            title: `${name} is a beautiful bird!`,
             date: `${month}. ${date}. ${year}`,
-            avatar: `./images/bird${birdInfo[randIdx].num}.png`,
-            nickname: birdInfo[randIdx].name,
+            avatar: `./images/bird${num}.png`,
+            nickname: name,
           };
         });
       };
       const DATA = genData();
 
-      const showPageBtns = () => {
-        let i = pageStart;
-        while (i < showPageCount + 1) {
+      const activeBtnPages = (e) => {
+        const pageClicked = Number(e?.currentTarget.textContent);
+        const allBtns = [...document.querySelector("#pagination").children];
+        allBtns.forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        if (pageClicked) {
+          e?.currentTarget.classList.add("active");
+          pageCurrent = pageClicked;
+        }
+        if (!pageClicked) {
+          allBtns.forEach((btn) => {
+            if (Number(btn.textContent) === pageCurrent) {
+              btn.classList.add("active");
+            }
+          });
+        }
+
+        if (pageCurrent === 1) {
+          first.disabled = true;
+          prev.disabled = true;
+          next.disabled = false;
+          last.disabled = false;
+          return false;
+        }
+        if (pageCurrent < pageSize + 1) {
+          first.disabled = false;
+          prev.disabled = true;
+          next.disabled = false;
+          last.disabled = false;
+          return false;
+        }
+        if (
+          pageCurrent > pageTotal - (pageTotal % pageSize) - 1 &&
+          pageCurrent < pageTotal
+        ) {
+          first.disabled = false;
+          prev.disabled = false;
+          next.disabled = true;
+          last.disabled = false;
+          return false;
+        }
+        if (pageCurrent === pageTotal) {
+          first.disabled = false;
+          prev.disabled = false;
+          next.disabled = true;
+          last.disabled = true;
+          return false;
+        }
+        first.disabled = false;
+        prev.disabled = false;
+        next.disabled = false;
+        last.disabled = false;
+      };
+
+      const clickPageBtn = (e) => {
+        changeBtnPages(e);
+        activeBtnPages(e);
+        dataOffset = Number(e?.currentTarget.textContent) * dataSize - dataSize;
+        showData();
+      };
+
+      const changeBtnPages = (e) => {
+        const pageClicked = Number(e?.currentTarget.textContent);
+        // const addNum = pageClicked - pageCurrent;
+        // const absAddNum = Math.abs(addNum);
+        // let firstPageNum = pageCurrent - (pageCurrent % pageSize) + 1;
+        // let lastPageNum = firstPageNum + pageSize - 1;
+        // let median = Math.ceil(pageSize / 2);
+        // allBtns[i].remove();
+
+        const allBtns = [...document.querySelector("#pagination").children];
+
+        if (!pageClicked) {
+          let i = pageCurrent;
+          let pageLast = pageSize;
+          if (pageCurrent > pageTotal - (pageTotal % pageSize) - 1) {
+            i = pageTotal - (pageTotal % pageSize) + 1;
+            pageLast = (pageTotal % pageSize) - 1;
+          }
+
+          allBtns.forEach((btn, idx) => {
+            if (idx > pageLast) {
+              btn.textContent = "";
+              btn.style.visibility = "hidden";
+              return false;
+            }
+            btn.textContent = i;
+            btn.style.visibility = "visible";
+            i++;
+          });
+        }
+      };
+
+      const genBtnPages = () => {
+        let i = pageCurrent;
+
+        while (i < pageSize + 1) {
           const btn = document.createElement("BUTTON");
+          btn.className = "btn-page";
           btn.textContent = i;
+          btn.addEventListener("click", clickPageBtn);
           pagination.append(btn);
           i++;
         }
@@ -203,8 +346,9 @@
       };
 
       const showData = () => {
-        const sliced = DATA.slice(offset, showDataCount * pageNum);
+        container.innerHTML = "";
 
+        const sliced = DATA.slice(dataOffset, dataSize * pageCurrent);
         const data = sliced.map((ele) => {
           const item = document.createElement("DIV");
           item.className = "item";
@@ -212,11 +356,57 @@
           item.append(...nodes);
           return item;
         });
+
         container.append(...data);
-        showPageBtns();
       };
 
+      genBtnPages();
+      activeBtnPages();
       showData();
+
+      prev.addEventListener("click", () => {
+        if (pageCurrent > pageSize) {
+          pageOffset = pageOffset - pageSize;
+          pageCurrent = pageOffset;
+          dataOffset = pageCurrent * dataSize - dataSize;
+          console.log(pageCurrent, pageOffset);
+          changeBtnPages();
+          activeBtnPages();
+          showData();
+        }
+      });
+
+      next.addEventListener("click", () => {
+        if (pageCurrent < pageTotal - (pageTotal % pageSize) - 1) {
+          pageOffset = pageOffset + pageSize;
+          pageCurrent = pageOffset;
+          dataOffset = pageCurrent * dataSize - dataSize;
+          console.log(pageCurrent, pageOffset);
+          changeBtnPages();
+          activeBtnPages();
+          showData();
+        }
+      });
+
+      first.addEventListener("click", () => {
+        pageOffset = 1;
+        pageCurrent = 1;
+        dataOffset = 0;
+        console.log(pageCurrent, pageOffset);
+        changeBtnPages();
+        activeBtnPages();
+        showData();
+      });
+
+      last.addEventListener("click", () => {
+        pageOffset = pageTotal - (pageTotal % pageSize) + 1;
+        pageCurrent = pageTotal;
+        dataOffset = (pageTotal - 1) * dataSize;
+        console.log(pageCurrent, pageOffset);
+        changeBtnPages();
+        activeBtnPages();
+        showData();
+      });
     </script>
   </body>
 </html>
