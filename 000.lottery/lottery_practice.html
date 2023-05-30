@@ -5,25 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lottery</title>
   </head>
-  <body></body>
+  <body>
+    <script>
+      // 유일한 값을 추출하는 과정에서 set 사용
+      // getRandomNumber 함수에 변수를 전달하는 과정에서 destructuring 사용
+      const SETTING = {
+        name: "LUCKY LOTTO!",
+        count: 6,
+        maxNumber: 45,
+      };
+      const { count, maxNumber } = SETTING;
+      const getRandomNumber = (num, max) => {
+        const numbers = new Set();
+        while (numbers.size < num) {
+          numbers.add(Math.floor(Math.random() * max) + 1);
+        }
+
+        console.log(numbers.values());
+      };
+
+      getRandomNumber(count, maxNumber);
+    </script>
+  </body>
 </html>
-<script>
-  // 유일한 값을 추출하는 과정에서 set 사용
-  // getRandomNumber 함수에 변수를 전달하는 과정에서 destructuring 사용
-  const SETTING = {
-    name: "LUCKY LOTTO!",
-    count: 6,
-    maxNumber: 45,
-  };
-  const { count, maxNumber } = SETTING;
-  const getRandomNumber = (num, max) => {
-    const numbers = new Set();
-    while (numbers.size < num) {
-      numbers.add(Math.floor(Math.random() * max) + 1);
-    }
-
-    console.log(numbers.values());
-  };
-
-  getRandomNumber(count, maxNumber);
-</script>
