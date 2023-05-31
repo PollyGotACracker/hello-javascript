@@ -1,26 +1,35 @@
 # :spaghetti: Hello JavaScript
 
+## 목표
+
+- scheduling 완성하기
+- image sprite 를 parallax scrolling 으로 변경 후 완성하기
+- readme 파일 정리하기
+- 마우스 좌표 내용 정리하기
+- Web Audio API 로 커스텀 플레이어 만들어보기
+- canvas 제대로 공부해보기
+
 ## 폴더
 
-### [Lottery](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/000.lottery)
+### [Lottery](https://github.com/PollyGotACracker/hello-javascript/tree/master/000.lottery)
 
-### [Scheduling](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/001.scheduling)
+### [Scheduling](https://github.com/PollyGotACracker/hello-javascript/tree/master/001.scheduling)
 
-### [Modal](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/002.modal)
+### [Modal](https://github.com/PollyGotACracker/hello-javascript/tree/master/002.modal)
 
-### [Image Sprite](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/003.image_sprite)
+### [Image Sprite](https://github.com/PollyGotACracker/hello-javascript/tree/master/003.image_sprite)
 
-### [Twinkling Stars](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/004.twinkling_stars)
+### [Twinkling Stars](https://github.com/PollyGotACracker/hello-javascript/tree/master/004.twinkling_stars)
 
-### [Draggable](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/005.draggable)
+### [Draggable](https://github.com/PollyGotACracker/hello-javascript/tree/master/005.draggable)
 
-### [File Dropzone](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/006.file_dropzone)
+### [File Dropzone](https://github.com/PollyGotACracker/hello-javascript/tree/master/006.file_dropzone)
 
-### [Carousel](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/007.carousel)
+### [Carousel](https://github.com/PollyGotACracker/hello-javascript/tree/master/007.carousel)
 
-### [Intersection Observer](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/008.intersection_observer)
+### [Intersection Observer](https://github.com/PollyGotACracker/hello-javascript/tree/master/008.intersection_observer)
 
-### [Pagination](https://github.com/PollyGotACracker/Hello_JavaScript/tree/master/009.pagination)
+### [Pagination](https://github.com/PollyGotACracker/hello-javascript/tree/master/009.pagination)
 
 ## 기억할 것들
 
@@ -89,13 +98,13 @@ _주의: `slice()` 는 원본 배열을 변경하지 않고 새로운 배열 반
 - [script 태그의 async, defer](https://ko.javascript.info/script-async-defer) :
 
   - async와 defer 스크립트는 모두 페이지 렌더링을 막지 않고 백그라운드에서 병렬로 다운로드 된다.
+  - `async`: DOM 이나 다른 스크립트와는 독립적인 스크립트, 또는 실행 순서가 중요하지 않은 경우에 적용한다.  
+    스크립트는 다운로드 되는 즉시 실행되므로 DOM 생성이 지연될 수 있다(DOMContentLoaded 이벤트 발생 시점과 무관).
+    async 스크립트들은 선언한 순서대로 실행 순서가 보장되지 않는다(비동기).
   - `defer`: DOM 전체가 필요한 스크립트나 실행 순서가 중요한 경우에 적용한다.  
     DOM 생성 완료 후, DOMContentLoaded 이벤트가 발생하기 전에 실행된다.
     따라서 DOM이 화면에 모두 로드되기 전까지 스크립트 실행이 지연되므로, 화면에 표시된 요소가 실제로 동작하지 않을 수 있음에 유의해야 한다.  
      defer 스크립트들은 선언한 순서대로 실행 순서가 보장된다.
-  - `async`: DOM 이나 다른 스크립트와는 독립적인 스크립트, 또는 실행 순서가 중요하지 않은 경우에 적용한다.  
-    스크립트는 다운로드 되는 즉시 실행되므로 DOM 생성이 지연될 수 있다(DOMContentLoaded 이벤트 발생 시점과 무관).
-    async 스크립트들은 선언한 순서대로 실행 순서가 보장되지 않는다(비동기).
 
 - 객체를 return 문 없이 반환할 경우는 소괄호로 감쌀 것
   `const func = (a, b)=>({ a + b })`
