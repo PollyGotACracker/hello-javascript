@@ -93,6 +93,50 @@ _주의: `slice()` 는 원본 배열을 변경하지 않고 새로운 배열 반
 - `Event.screenX`, `Event.screenY` :  
   사용자 모니터 기준
 
+### [Closure](https://poiemaweb.com/js-closure)
+
+- Closure:  
+  내부함수에서 외부함수의 context 에 접근할 수 있음을 뜻한다.
+- Lexical Scope:  
+  유효범위(scope)는 함수를 호출하는 위치가 아닌 *함수가 선언된 위치*에 따라 결정된다. 즉, 함수는 선언 당시의 lexical environment 를 기억하여 전역, 상위 scope 및 자신의 scope 를 참조할 수 있다.
+- 외부함수가 내부함수보다 먼저 종료되어 실행 컨텍스트 스택에서 제거되더라도, 외부함수 실행 컨텍스트 내 활성 객체(Activation Object;변수나 함수 선언에 대한 정보)는 내부함수에 의해 참조되는 한 유효하다. 그러므로 외부함수 밖에서 내부함수가 호출될 때 내부함수는 scope chain 을 통해 외부함수의 지역변수에 접근 가능하다.
+- 외부로부터의 접근을 제한하여 의도치 않은 값의 변경을 막거나 멤버변수의 값을 은닉화할 수 있다(private).
+
+#### 비동기 함수 문제
+
+- setTimeout 이나 setInterval 과 같은 비동기함수에서 접근하는 변수가 global scope 를 갖고 그 값이 계속 변경되는 경우 의도치 않은 결과가 나타난다. 이 때 closure 를 활용하면 해결 가능하다.
+- JS 는 단일 thread 언어로 callStack 에 작업을 push 및 pop 한다. 그러나 비동기 작업은 callStack 이 아닌 eventQueue 에 저장되며, callStack 이 비는 순간 해당 작업을 push 하여 실행한다.
+- 비동기함수 실행 시 내부 callback 함수는 이미 고정된 closure 를 가진다. 따라서 참조하는 변수의 값이 변하더라도 closure 가 고정되어 있으므로 변수의 값 또한 고정되어 있다.
+
+```js
+for (var i = 0; i < 5; i++) {
+  setTimeout(() => console.log(i), 1000);
+} // 5 5 5 5 5
+
+for (let i = 0; i < 5; i++) {
+  setTimeout(() => console.log(i), 1000);
+} // 0 1 2 3 4
+
+// 즉시실행함수
+// 내부 함수에서 접근하는 변수를 감싸(closure) 값을 고정
+for (var i = 0; i < 5; i++) {
+  ((j) => {
+    setTimeout(() => {
+      console.log(j);
+    }, 1000);
+  })(i);
+}
+```
+
+- var 키워드(function level scope): 1초 후 5를 다섯 번 출력한다.  
+  내부함수가 참조하는 변수 i 는 for문 밖에서 하나의 scope 만을 가진다.
+  따라서 callback 내부의 i 는 모든 loop 가 끝난 시점의 i 의 값인 5 이다
+  (증가식 i++ 가 실행되어 i 는 5가 되고, i < 5 는 false 이므로 loop 중지).
+
+- let 키워드(block level scope): 1초 후 0 부터 4 까지의 숫자를 출력한다.  
+  내부함수가 참조하는 변수 i 는 각 loop 마다 생성된 새로운 scope 를 가진다. for문이 종료되어도 지역변수 i 는 유효하다.
+  따라서 callback 내부의 i 는 각 loop 시점의 i 값이다.
+
 ### 그 외
 
 - [script 태그의 async, defer](https://ko.javascript.info/script-async-defer) :
