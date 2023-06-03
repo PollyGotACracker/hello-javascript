@@ -93,6 +93,30 @@ _주의: `slice()` 는 원본 배열을 변경하지 않고 새로운 배열 반
 - `Event.screenX`, `Event.screenY` :  
   사용자 모니터 기준
 
+### 고차함수
+
+- return 값이 함수이거나, callback 함수를 인자로 전달받는 함수
+- callback 함수로 고차함수를 사용하면 addEventListener 에서 함수를 호출해도 된다.
+
+```js
+// event 객체와 함께 매개변수에 인수 전달
+const ele1 = document.querySelector("#element1");
+const func1 = (event, value) => {
+  console.log(event);
+  console.log(value);
+};
+ele1.addEventListener("click", (event) => func1(event, "Hello"));
+
+// 고차함수 사용
+// callback 실행 직전에 event 객체를 인수로 전달한다.
+const ele2 = document.querySelector("#element2");
+const func2 = (value) => (event) => {
+  console.log(event);
+  console.log(value);
+};
+ele2.addEventListener("click", func2("Hello"));
+```
+
 ### [Closure](https://poiemaweb.com/js-closure)
 
 - Closure:  
