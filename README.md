@@ -4,7 +4,6 @@
 
 - scheduling 완성하기
 - image sprite 를 parallax scrolling 으로 변경 후 완성하기
-- readme 파일 정리하기
 - 마우스 좌표 내용 정리하기
 - Web Audio API 로 커스텀 플레이어 만들어보기
 - canvas 제대로 공부해보기
@@ -32,6 +31,28 @@
 ### [Pagination](https://github.com/PollyGotACracker/hello-javascript/tree/master/009.pagination)
 
 ## 기억할 것들
+
+### `||` 와 `??` 연산자의 차이점
+
+- [ko.javascript.info: nullish 병합 연산자 '??'](https://ko.javascript.info/nullish-coalescing-operator)
+- `||` 연산자: <b>논리 OR</b> 연산자  
+  왼쪽 피연산자가 falsy 값 (`false`, `0`, `""`, `null`, `undefined`, `NaN`) 이면 오른쪽 피연산자를 반환
+- `??` 연산자: <b>nullish 병합</b> 연산자  
+  왼쪽 피연산자가 `null` 또는 `undefined` 일 때만 오른쪽 피연산자를 반환
+- 참고: `!` 논리 NOT 연산자도 falsy 값을 기준으로 하므로, `0` 이나 `""` 을 다룰 때 주의할 것
+
+```js
+console.log(undefined || "value"); // value
+console.log(0 || "value"); // valueJ
+console.log(undefined ?? "value"); // value
+console.log(0 ?? "value"); // 0
+
+// 할당 연산자 사용
+const a = 0 || "value";
+console.log(a); // value
+const b = 0 ?? "value";
+console.log(b); // 0
+```
 
 ### 원본 배열을 변경하는 메서드들
 
