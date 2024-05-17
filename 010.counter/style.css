@@ -1,0 +1,42 @@
+/*
+https://css-tricks.com/animating-number-counters/ 
+*/
+
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+.counter {
+  width: max-content;
+  font: 900 5rem system-ui;
+}
+
+.counter.css {
+  counter-reset: num var(--num);
+}
+.counter.css::after {
+  content: counter(num);
+}
+
+.counter.hover {
+  transition: --num 1s;
+}
+.counter.hover:hover {
+  --num: 100;
+}
+
+.counter.keyframes {
+  /* animation: counter 5s infinite alternate ease-in-out; */
+  animation: counter 5s forwards ease-in-out;
+}
+
+@keyframes counter {
+  from {
+    --num: 0;
+  }
+  to {
+    --num: 100;
+  }
+}
